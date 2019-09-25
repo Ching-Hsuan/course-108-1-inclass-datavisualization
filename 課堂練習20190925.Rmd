@@ -13,3 +13,186 @@ showtext_auto(enable=TRUE) #啟用字體
 theme_set(theme_classic())
 knitr::opts_chunk$set(out.width='80%', fig.asp=.75, fig.align='center', fig.showtext=T)
 ```
+
+
+##1.4 gather and spread
+###1.4.1 gather
+####範例
+```{r}
+df_gatherExample <- data.frame(
+  country=c("A","B","C"),
+  `1999`=c("0.7k","37k","212k"),
+  `2000`=c("2k","80k","213k"),
+  check.names = F)
+df_gatherExample
+
+gather(df_gatherExample,
+       `1999`,`2000`,
+       key="年份",value="人口")
+```
+
+####gather中的變數選擇可使用select helpers.
+
+####練習
+```{r}
+#將collegeData裡各年級男女生人數合成兩個欄位，類別,人數，其中類別值為原始欄位名稱（即一年級男生，一年級女生，…等等），而人數則為對應人數。
+collegeData <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/103_student.csv")
+
+collegeData %>% 
+ gather(contains("生"),
+        key="類別",
+        value="人數")->collegeData_gather
+collegeData_gather
+
+
+```
+
+###練習
+```{r}
+#下載以下民國107年桃園各地區每月結婚對數：
+library(readr)
+df_taoyuanMarriage <- read_csv("https://data.tycg.gov.tw/opendata/datalist/datasetMeta/download?id=f95d1a33-ec56-44c5-a9ec-3afba8157e39&rid=fd2070ef-7431-4f9c-bc3a-82d7bfbcd2fb")
+
+#將資料「一～十二月」縮排在月份變數，而其下的對應值縮排在對數變數。
+
+df_taoyuanMarriage<-
+
+
+#計算每個月份桃園總結婚對數。
+
+gather(df_taoyuanMarriage,
+       ends_with("月"),
+       key="月份",value="對數"
+      )
+
+
+gather(df_taoyuanMarriage,
+      -月份區域別,
+       key="月份",value="人數")
+
+
+#找出每個地區結婚最高峰月份。
+```
+
+
+
+###1.4.2 spread
+####範例
+```{r}
+df_spreadExample <- data.frame(
+  id = c(1,1,1,2,2,2),
+  var = c("花朶萼片長度", "學名", "總類數"),
+  value = c(5.1, "setosa", 1, 
+            7.0, "versicolor", 2))
+df_spreadExample
+```
+
+####將var變數依其值展開成不同欄位名稱，而欄位下所對應的值則為value對應值
+```{r}
+df_spreadExample
+spread(df_spreadExample,
+       var,value)
+```
+
+####練習
+```{r}
+#將前一個練習的gather data frame還原。
+collegeData_gather %>%
+  spread(
+    類別,人數
+  )
+```
+
+####練習
+```{r}
+#由collegeData計算：
+#(hint: stringr套件裡str_detect(向量,文字特徵)可偵測向量裡每個元素是否包含某文字特徵。)
+##每筆資料之男生總數、女生總數、學生總數
+
+##每個學校之男生總數、女生總數、學生總數
+
+```
+
+####練習
+```{r}
+#下載台銀2018年各交易日收盤匯率：
+df_twbankExchangeRate <- read_csv("http://www.bot.com.tw/Govinfo/opendata/csv/151/20180101-20181231-FXCRT.csv")
+#留下日期、幣別、即期買入匯率，將幣別依其貨幣名稱spread成不同欄位，其下所屬值為即期買入匯率。
+
+
+
+df_twbankExchangeRate %>%
+  mutate(
+    幣別=as.factor(幣別),
+    即期買入匯率=as.double(即期買入匯率),
+    即期賣出匯率=as.double(即期賣出匯率),
+    日期=lubridate::ymd(日期)
+  )->df_twbankExchangeRate
+
+
+df_twbankExchangeRate %>%
+  select(-即期賣出匯率) %>%
+  spread(幣別,)
+```
+
+##1.5 變數類別調整
+data frame的每個變數均為atomic vector，而atomic vector的class會影響之後作圖的合理性，故作圖前要先確保每個變數的class正確性：
+
+numeric: as.numeric/as.double
+
+integer: as.integer
+
+factor: as.factor
+
+date time: 使用lubridate套件
+
+###練習
+```{r}
+#請將df_twbankExchangeRate的變數class做適當的修正。
+```
+
+
+
+##1.6 Data import
+
+台灣中文資料常使用Windows BIG5編碼，然而它並不是國際標準的BIG5，有時encoding你選BIG5還是有亂碼，此時可以試試CP950，或ISO-8859系列編碼。
+
+若Import Dataset失效，可以改以read_lines()先將文字檔內容原封不動讀入，再使用iconv()來嘗試各種編碼轉換組合，都沒問題才使用read_csv()讀入。
+
+政府資料開放平台：每日外幣參考匯率 > 檢視資料
+
+編碼格式: BIG5
+以下範例將原始資料轉成UTF8編碼的csv檔儲存
+
+```{r}
+library(readr); library(dplyr)
+# 線上引入原始資料成字串向量
+read_lines("http://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=DailyForeignExchangeRates") ->
+  originalLines
+
+# 將字串由CP950編碼改成UTF8再讀成data frame data2
+originalLines %>%
+  iconv(from="CP950",to="UTF8") %>% 
+  read_csv() -> data2
+```
+
+```{r}
+library(readr)
+taifex_open_data <- read_csv("http://www.taifex.com.tw/data_gov/taifex_open_data.asp?data_name=DailyForeignExchangeRates",
+locale = locale(encoding = "BIG5"))
+```
+
+
+##BIG5編碼也有數種，視中文語系地區而不同。對於世界不同語系，R可處理那些編碼可由以下指令查詢：
+
+iconvlist()
+
+##練習
+```{r}
+#試著從以下任意一個資料庫下載一個csv檔，並讀入R:
+ ##總體統計資料庫(http://statdb.dgbas.gov.tw/pxweb/dialog/statfile9L.asp)、政府資料開放平台(https://data.gov.tw/)
+library(readr)
+uc_export_download_confirm_jeak_id_1ggm5IJS2ATjiWg4e205nJQrmPzJu1MjJ <- read_csv("https://drive.google.com/uc?export=download&confirm=jeak&id=1ggm5IJS2ATjiWg4e205nJQrmPzJu1MjJ",
+                locale = locale(encoding = "BIG5"))
+
+
