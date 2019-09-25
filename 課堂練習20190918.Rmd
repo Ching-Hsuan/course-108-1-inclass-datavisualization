@@ -1,22 +1,15 @@
 ---
-title: '20190911'
+title: '20190918'
 author: "Ching-Hsuan"
-date: "2019/9/17"
-output: html_document
+date: "2019/9/18"
+output: html_notebook
 ---
 
-```{r basic setup, message=FALSE, echo=TRUE, eval=T}
-library(dplyr); library(stringr); library(ggplot2); library(plotly); library(lubridate); library(readr); library(tidyr); library(showtext)
-
-font_add("QYuan","cwTeXQYuan-Medium.ttf") # 新增字體
-showtext_auto(enable=TRUE) #啟用字體
-theme_set(theme_classic())
-knitr::opts_chunk$set(out.width='80%', fig.asp=.75, fig.align='center', fig.showtext=T)
-```
-
-
-```{r basic setup, message=FALSE, echo=TRUE, eval=T}
-#範例1
+#CH1
+##1.1 data frame
+###data frame是list的特例:每個元素為等長atomic vector。
+###範例
+```{r}
 StuList <- list(
   次序=c(1,2,3,4,5,6,7,8),
   學號=c(172,214,322,425,517,833,752,114),
@@ -25,12 +18,12 @@ StuList <- list(
   成績=c(80,42,90,82,50,77,30,90)
   )
 StuList 
-as.data.frame(StuList) -> StuDFfromList #dataframe為list的特例
+as.data.frame(StuList) -> StuDFfromList 
 StuDFfromList
 ```
 
-```{r basic setup, message=FALSE, echo=TRUE, eval=T}
-#範例2
+###範例
+```{r}
 StuDF <- data.frame(
   次序=c(1,2,3,4,5,6,7,8),
   學號=c(172,214,322,425,517,833,752,114),
@@ -41,8 +34,495 @@ StuDF <- data.frame(
 StuDF 
 ```
 
-
+###資料結構
+```{r}
 class(StuDF)
 typeof(StuDF)
-length(StuDF) # 從向量角度看
+length(StuDF) # 從向量角度看，同ncol
 nrow(StuDF) # 從矩陣角度看
+```
+
+##1.2 dplyr套件:針對data frame的資料處理套件
+
+###檢查變數結構
+```{r}
+library(dplyr)
+str(StuDF)
+head(StuDF)
+tail(StuDF)
+```
+
+###1.2.1 slice：切割資料行
+####依row位置選擇資料
+```{r}
+StuDF
+slice(StuDF,1:3)
+slice(StuDF,4:5)
+slice(StuDF,n()) #n():最後一筆
+```
+
+####練習:使用slice顯示最後2筆資料。
+```{r}
+slice(StuDF,(n()-1):n())
+```
+
+####練習:使用slice顯示除了5-7筆的所有資料。
+```{r}
+slice(StuDF,-5:-7)
+slice(StuDF,-(5:7))
+slice(StuDF,c(-5,-6,-7))
+```
+
+####練習:只要1,4,8
+```{r}
+slice(StuDF,c(1,4,8))
+
+```
+
+####練習:政府開放平台:106學年大專院校校別學生數
+```{r}
+library(readr)
+collegeData <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/master/103_student.csv")
+```
+#####檢查變數結構
+```{r}
+str(collegeData)
+```
+
+#####練習:顯示前4筆，後3筆，中間第101到110筆
+```{r}
+slice(collegeData,c(1:4))
+slice(collegeData,(n()-2):n())
+slice(collegeData,c(101:110))
+```
+
+###1.2.2 mutate：產生變數
+####範例
+```{r}
+StuDF
+mutate(StuDF,
+       調分後成績=成績+10)
+transmute(StuDF,
+       調分後成績=成績+10) # 不保留其他變數
+
+```
+
+####若要更動原data frame內容，記得要回存：
+#####法一
+```{r}
+StuDF
+mutate(StuDF,
+       調分後成績=成績+10) -> StuDF
+```
+
+#####法二
+```{r}
+StuDF
+StuDF <- mutate(StuDF,
+       調分後成績=成績+10) 
+```
+
+#####法三
+```{r}
+#不使用dplyr則必需使用$取出變數向量後，進行運算再回存到data frame裡新的變數裡：
+StuDF$調分後成績 <-
+  StuDF$成績+10
+```
+
+
+####練習:
+```{r}
+#在collegeData:新增變數男生及女生,其值為「一到四年級」所有男生及女生的加總。（男生使用dplyr, 女生不使用dplyr）; 新增變數男女生比，其值為前述男生/女生。
+collegeData<-mutate(collegeData,男生=一年級男生+二年級男生+三年級男生+四年級男生,女生=一年級女生+二年級女生+三年級女生+四年級女生,男女生比=男生/女生)
+
+```
+
+
+###1.2.3 summarise：計算特徵值
+####範例
+```{r}
+StuDF
+summarise(StuDF,
+        平均成績=mean(成績),
+        最高分=max(成績),
+        最低分=min(成績))
+#summarise()會回傳一個data frame，其變數為計算特徵變數。
+```
+
+####練習
+```{r}
+#以上計算若把summarise改成mutate結果會如何？
+mutate(StuDF,
+        平均成績=mean(成績),
+        最高分=max(成績),
+        最低分=min(成績))
+##每一筆資料都會增加相同的變數
+
+#若老師的調分為原始成績加上「最高最低分差距除以5」，請產生調分成績:
+StuDF<-mutate(StuDF,
+       調分成績=成績+(max(成績)-min(成績))/5)
+```
+
+###1.2.4 select：選擇變數
+####範例
+```{r}
+StuDF
+mutate(StuDF,
+        平均成績=mean(成績),
+        最高分=max(成績),
+        最低分=min(成績)) -> StuDF2
+StuDF2
+names(StuDF2) #顯示物件內元素名稱
+select(StuDF2,
+       姓名,學號,成績,調分後成績)
+select(StuDF2,
+       -次序,-性別,-最高分,-最低分)
+```
+
+####select可搭配select helpers:
+#####starts_with(): Starts with a prefix字首.
+#####ends_with(): Ends with a suffix字尾.
+#####contains(): Contains a literal string.文字字符串
+#####matches(): Matches a regular expression.
+#####num_range(): Matches a numerical range like x01, x02, x03.
+#####one_of(): Matches variable names in a character vector.
+#####everything(): Matches all variables.
+#####last_col(): Select last variable, possibly with an offset.
+
+####範例:挑出含特定字元的變數
+```{r}
+select(StuDF2,
+       次序,性別,
+       contains("最"))
+
+select(StuDF2,
+       -次序,-性別,
+       -contains("最"))
+```
+
+####練習
+```{r}
+#選出collegeData中所有男生變數：
+select(collegeData,
+       contains("男生"))
+```
+
+###1.2.5 filter：條件選取觀測值
+####Logical predicates
+```{r}
+StuDF
+# logical vector
+logiChoose <- c(
+  F,F,F,T,T,F,T,F
+  )
+# 使用logical vector選擇所要觀測值"女"
+StuDF[logiChoose,]
+```
+
+####which()可顯示向量元素為真的位置。
+```{r}
+logiChoose
+which(logiChoose)
+slice(StuDF,which(logiChoose))
+```
+
+####使用logical predicate產生logical vector
+```{r}
+StuDF$性別=="女" #logical predicate
+logiChoose <- StuDF$性別=="女"
+StuDF[logiChoose,]
+```
+
+####常見的logical predicate:
+#####範例:relational operators
+```{r}
+#女性，且成績大於60
+StuDF$性別=="女" 
+StuDF$成績>60
+
+#combined with logical operator
+(StuDF$性別=="女" & StuDF$成績>60) -> logiChoose2
+logiChoose2
+StuDF[logiChoose2,]
+```
+
+####使用filter
+#####filter(data frame, logical predicates)
+```{r}
+StuDF
+filter(StuDF,
+       性別=="女")
+filter(StuDF,
+       (性別=="女" &
+        成績>60))
+filter(StuDF,
+       性別=="女",
+       成績>60) # 多個AND條件可用,分隔
+```
+
+#####練習
+```{r}
+#請計算StuDF中:女性平均成績，最高分，最低分
+StuDF_female<-filter(StuDF,性別=="女")
+mean(StuDF_female$成績)
+max(StuDF_female$成績)
+min(StuDF_female$成績)
+
+#男性平均成績，最高分，最低分
+StuDF_male<-filter(StuDF,性別=="男")
+mean(StuDF_male$成績)
+max(StuDF_male$成績)
+min(StuDF_male$成績)
+```
+
+#####練習:
+```{r}
+#依以下各別情境，選出collegeData中符合情境的觀測值：
+##縣市名稱為“30 臺北市”
+###法一
+filter(collegeData,
+       縣市名稱=="30 臺北市"
+       )
+###法二
+str_detect(
+  collegeData$縣市名稱,
+  "30"
+  ) %>%
+  collegeData[.,]
+
+##縣市名稱為“30 臺北市”或“01 新北市”。（使用OR|或belong to %in%）
+filter(collegeData,
+       縣市名稱=="30 臺北市" | 縣市名稱=="01 新北市")
+```
+
+###1.2.6 group_by：分群計算
+####group_by(data frame,分群變數):產生grouped data frame，用在mutate/transmute/summarise時會產生分群計算效果。
+
+#####範例
+```{r}
+#step1:計算不同性別之平均成績及最高/低分
+group_by(StuDF,
+         性別) -> StuDF_by性別
+
+#step2:使用grouped data frame
+summarise(StuDF_by性別,
+        平均成績=mean(成績),
+        最高分=max(成績),
+        最低分=min(成績))
+
+# 使用ungrouped data frame
+summarise(StuDF,
+        平均成績=mean(成績),
+        最高分=max(成績),
+        最低分=min(成績))
+
+#男女調分不同:各加其群組之「最高減最低分除以5」
+mutate(
+  StuDF_by性別,
+  最高分=max(成績),
+  最低分=min(成績),
+  調分大小=(最高分-最低分)/5,
+  調分後成績=成績+調分大小
+) -> StuDF_依性別調分
+StuDF_依性別調分
+
+#依性別成績分:依性別及成績是否大於75分：
+group_by(StuDF,
+         性別,
+         (成績>75)) -> StuDF_by性別成績
+
+summarise(StuDF_by性別成績,
+          平均成績=mean(成績),
+          人數=n())
+```
+          
+####mutate/transmute/summarise
+#####若input為grouped data frame，其output也會是grouped data frame.
+#####output若接著用，也會是分群計算的結果。
+#####最好習慣接著ungroup
+```{r}
+ungroup(StuDF_依性別調分) -> StuDF_調分後
+```
+
+#####練習
+```{r}
+#計算collegeData中不同縣市名稱及體系別及等級別的一年級男生及一年級女生總數（使用sum）和學校數目。
+group_by(collegeData,
+         縣市名稱,體系別,等級別)-> collegeData_grouped
+
+summarise(collegeData_grouped,
+          一年級男生總數=sum(一年級男生),
+          一年級女生總數=sum(一年級女生),
+          學校數目=length(unique(學校名稱)))
+```
+
+###1.3 Pipe operator
+####原例
+```{r}
+group_by(StuDF,
+         性別) -> StuDF_by性別
+
+mutate(
+  StuDF_by性別,
+  最高分=max(成績),
+  最低分=min(成績),
+  調分大小=(最高分-最低分)/5,
+  調分後成績=成績+調分大小
+  ) -> StuDF_依性別調分
+
+ungroup(StuDF_依性別調分) -> 
+  StuDF_調分後
+```
+
+####%>% pipe operator:
+#####原則1:預設：%>% 把它左邊（LHS）的物件流入 它右邊（RHS）函數的argument第一個位置。 
+```{r}
+# group_by(StuDF,
+#         性別) -> StuDF_by性別
+StuDF %>% group_by(
+         性別) -> StuDF_by性別
+
+# mutate(
+#   StuDF_by性別,
+#   最高分=max(成績),
+#   最低分=min(成績),
+#   調分大小=(最高分-最低分)/5,
+#   調分後成績=成績+調分大小
+# ) -> StuDF_依性別調分
+
+StuDF_by性別 %>%
+mutate(
+  最高分=max(成績),
+  最低分=min(成績),
+  調分大小=(最高分-最低分)/5,
+  調分後成績=成績+調分大小
+  ) -> StuDF_依性別調分
+
+# ungroup(StuDF_依性別調分) -> 
+#   StuDF_調分後
+StuDF_依性別調分 %>% ungroup() -> 
+  StuDF_調分後
+```
+
+#####原則2:若要流入右邊函數的「非」第一位置argument，則用.在右邊函數中標示。
+
+#####原則3:%>% 可進行串接，則下一個%>%會以上個函數輸出結果當做新的LHS物件。串接使得語法更貼近人類語言：
+```{r}
+StuDF %>% # 將StuDF
+  group_by(性別) %>% # 依性別分群
+  mutate( # 接著計算各群的:
+    最高分=max(成績),
+    最低分=min(成績),
+    調分大小=(最高分-最低分)/5,
+    調分後成績=成績+調分大小
+  )  %>% 
+  ungroup() -> # 接著ungroup後輸出
+  StuDF_調分後
+```
+
+
+#####練習
+```{r}
+#將collegeData，依等級別,縣市名稱分群後,計算一年級男/女生比例後,找出男女生比例最高的等級別,縣市名稱組合。
+collegeData_group2<-group_by(collegeData,等級別,縣市名稱)
+collegeData_性別比<-mutate(collegeData_group2,
+                          男女生比=一年級男生/一年級女生
+                          )
+collegeData_性別比$男女生比
+  [is.na(collegeData_性別比$男女生比)]<-000
+collegeData_性別比$男女生比
+  [is.infinite(collegeData_性別比$男女生比)]<-0000
+collegeData_男女生比例最高<-
+  collegeData_性別比
+    [which.max(collegeData_性別比$男女生比),]
+select(collegeData_男女生比例最高,
+       等級別,縣市名稱,男女生比)
+
+
+collegeData %>% group_by(等級別,縣市名稱) %>% mutate(男女生比=一年級男生/一年級女生) ->collegeData_性別比2
+collegeData_性別比2$男女生比
+  [is.na(collegeData_性別比2$男女生比)]<-000
+collegeData_性別比2$男女生比
+  [is.infinite(collegeData_性別比2$男女生比)]<-0000
+collegeData_性別比2
+  [which.max(collegeData_性別比2$男女生比),]                  %>% select(等級別,縣市名稱,男女生比)
+```
+
+  
+#####練習
+```{r}
+#取得transcriptDataFinal
+load(url("https://www.dropbox.com/s/duh5aaqgl2f5m3z/loopTranscriptData.Rda?raw=1"))
+
+#計算每位學生每學期的平均成績。
+transcriptDataFinal_group1<-
+  group_by(transcriptDataFinal,學號,學年,學期)
+transcriptDataFinal_每學期<-
+  summarise(transcriptDataFinal_group1,
+  平均成績=sum(學期成績)/sum(學分數)
+         )
+
+transcriptDataFinal %>% 
+  group_by(學號,學年,學期) %>%
+  summarise(平均成績=sum(學期成績*學分數)/sum(學分數))-> transcriptDataFinal_每學期
+
+#練習:計算每位學生每學期學分數在必/選/通 三類的學分數比重。
+c('學號','學屆','學系','學年','學期','學期成績','學分數','類別') -> names(transcriptDataFinal)
+transcriptDataFinal_group2<-
+  group_by(transcriptDataFinal,學號,學年,學期,類別)
+transcriptDataFinal_group2<-
+  summarise(transcriptDataFinal_group2,
+  各學分=sum(學分數)
+         )
+transcriptDataFinal_比例<-
+  mutate(transcriptDataFinal_group2,
+  比例=各學分/sum(各學分)
+  )
+
+transcriptDataFinal %>% 
+  group_by(學號,學年,學期,類別) %>%
+  summarise(各學分=sum(學分數)) %>%
+  mutate(比例=各學分/sum(各學分)
+  )
+                 
+#學屆為100（即100學年入學）的學生，各系學生在學所修總學分數之中位數，何系最高？
+transcriptDataFinal2<-
+  filter(transcriptDataFinal,
+         學屆=="100")
+transcriptDataFinal_group4<-
+  group_by(transcriptDataFinal2,
+           學號,學系,學分數)
+transcriptDataFinal_學分<-
+  summarise(transcriptDataFinal_group4,
+  學分=sum(學分數)
+         )
+transcriptDataFinal_總學分<-
+  summarise(transcriptDataFinal_學分,
+  總學分=sum(學分)
+         )
+unique(transcriptDataFinal_總學分$學系
+       )
+transcriptDataFinal_總學分2<-
+  group_by(transcriptDataFinal_總學分,學系)
+transcriptDataFinal_中位數<-
+  summarise(transcriptDataFinal_總學分2,
+  中位數=median(總學分)
+         )
+transcriptDataFinal_中位數最高<-
+  transcriptDataFinal_中位數[which.max(
+    transcriptDataFinal_中位數$中位數),]
+transcriptDataFinal_中位數最高
+
+
+transcriptDataFinal %>% 
+  filter(學屆=="100") %>% 
+  group_by(學號,學系,學分數) %>% 
+  summarise(學分=sum(學分數)) %>% 
+  summarise(總學分=sum(學分)) %>%
+  group_by(學系) %>% 
+  summarise(中位數=median(總學分))->
+  transcriptDataFinal_中位數
+transcriptDataFinal_中位數[which.max(
+    transcriptDataFinal_中位數$中位數),]
+transcriptDataFinal_中位數最高
+```
