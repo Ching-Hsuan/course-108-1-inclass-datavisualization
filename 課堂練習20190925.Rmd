@@ -194,5 +194,221 @@ iconvlist()
 library(readr)
 uc_export_download_confirm_jeak_id_1ggm5IJS2ATjiWg4e205nJQrmPzJu1MjJ <- read_csv("https://drive.google.com/uc?export=download&confirm=jeak&id=1ggm5IJS2ATjiWg4e205nJQrmPzJu1MjJ",
                 locale = locale(encoding = "BIG5"))
+````
+
+#Ch2 ggplot2: geom
+##gg: grammar of graphics
+##2.1 Grammar of Graphics
+###引入資料
+```{r}
+library(readr)
+subsetDataTWbank <- read_csv("https://www.dropbox.com/s/t8ulj3d7cgl8jh5/subsetDataTWbank.csv?dl=1")
+```
+
+###基本語法
+####資料data: subsetDataTWbank
+####座標對應coordinate: x=西元年月,y=`定存利率-一個月-固定`
+####幾何圖示類型geom: line
+
+###當變數名稱有特殊符號時，用反頓點符號` 將變數名稱圈住，即:`<變數名稱>`
+####範例
+ggplot(<資料>)+ # 設置畫布 
+  geom_<幾何圖示類型>( # 畫上幾何圖示 
+              aes(<座標對應>) #座標對應
+  )
+  
+  
+####幾何圖示類型為line
+```{r}
+library(ggplot2)
+ggplot(subsetDataTWbank)+
+  geom_line(
+    aes(x=西元年月,y=`定存利率-一個月-固定`)
+  )
+```
+
+####練習
+```{r}
+#請用pipe寫法以subsetDataTWbank開始，改寫以上語法。
+subsetDataTWbank %>%
+  ggplot()+
+  geom_line(
+    aes(x=西元年月,y=`定存利率-一個月-固定`)
+  )
+```
+
+###幾何圖示類型為point
+```{r}
+library(ggplot2)
+ggplot(subsetDataTWbank)+
+  geom_point(
+    aes(x=西元年月,y=`定存利率-一個月-固定`)
+  )
+```
+
+###練習
+```{r}
+#請由subsetDataTWbank產生以下圖示：其中
+##座標對應：x=定存類型, y=利率
+##幾何圖示類型：boxplot
+
+subsetDataTWbank_gather
+
+subsetDataTWbank %>%
+  ggplot()+
+  geom_line(
+    aes(x=定存類型,y=`利率`)
+  )
+subsetDataTWbank %>% 
+  qplot(x=,
+        y=
+        xlab=定存類型,
+        ylab=`利率`)
+  )
+
+
+
+qplot(x=Month,                               
+      y=Ozone,
+      data=airquality,                     
+      geom="boxplot",       # 圖形=boxplot
+      xlab="Temp",                          
+      color= Month          # 以顏色標註月份，複合式的合鬚圖
+)
+
+
+
+```
+
+```{r}
+subsetDataTWbank %>%
+  gather(
+    `定存利率-一個月-固定`,`定存利率-二年期-固定`,`定存利率-三年期-固定`,
+    key = "期數", value = "利率"
+  ) %>%
+  ggplot() +
+  geom_boxplot(
+    aes(x=期數,y=利率,color=西元年月)
+  ) 
+```
+
+
+
+
+###層疊概念:geom_...可以不斷以+層疊上去。
+```{r}
+library(ggplot2)
+ggplot(subsetDataTWbank)+
+  geom_line(
+    aes(x=西元年月,y=`定存利率-一個月-固定`)
+  )+
+  geom_point(
+    aes(x=西元年月,y=`定存利率-一個月-固定`)
+  )
+```
+
+####geom裡相同的aes mapping可以移至ggplot()裡：
+```{r}
+library(ggplot2)
+ggplot(subsetDataTWbank,
+       aes(x=西元年月,y=`定存利率-一個月-固定`))+
+  geom_line()+
+  geom_point()
+```
+  
+###美學對應
+####aes＝aesthetic (美學) 在gg裡它指得是資料設計呈現的對應方式。
+####資料值除了可以對應到視覺呈現的x,y軸位置外，常見的其他設計對應還有：color、size等，後面章節會有更多說明。
+```{r}
+subsetDataTWbank_gather %>%
+  ggplot()+
+  geom_line(
+    aes(x=西元年月,y=利率,color=定存類型),
+    color=red,
+    alpha=0.5, #通透度
+    size=2
+    )
+```
+
+
+
+##2.2 字串變數
+###類別資料
+####字串變數會被轉成factor並依其levels值順序畫在軸上，故要改變字串值出現順序可以透過改變levels順序。
+
+####查看目前levels出現順序：
+```{r}
+subsetDataTWbank_gather$定存類型 %>% 
+  as.factor %>% levels
+```
+
+####改變levels出現順序：
+```{r}
+subsetDataTWbank_gather %>%
+  mutate(
+    定存類型=factor(定存類型,levels=c("定存利率-一個月-固定","定存利率-二年期-固定","定存利率-三年期-固定"))
+  ) -> subsetDataTWbank_gather
+```
+
+
+####重新繪圖
+```{r}
+subsetDataTWbank_gather %>%
+  ggplot()+
+  geom_boxplot(aes(x=定存類型,y=利率))
+```
+
+
+####字串：
+#####會以factor處理。
+#####幾何位置會以其levels順序決定。
+#####levels順序可以factor(..., levels=類別文字向量)中的類別文字向量元素值序改變。
+
+###時間資料
+####一般時間資料引入R時會常被以文字看待，如“2019-01-01”或“民國88年11月”
+####繪圖時建議以下處理順序：
+#####非西元日期字串改成西元日期字串。
+#####西元日期字串使用lubridate套件改成date time class。
+twCalendar <- c("民國88年11月1日","民國88年12月1日","民國89年1月1日")
+
+####非西元日期改西元
+```{r}
+twCalendar %>% # 取出字串中的數字部份
+  stringr::str_extract_all("[:digit:]+") %>%
+  #將每個日期的「年」數字加上1991再合併年月日成為`yyyy-mm-dd`格式
+  purrr::map_chr(
+             function(x) {
+               x1=as.integer(x[[1]])+1911
+               x[[1]]=as.character(x1)
+               stringr::str_c(x,collapse="-")
+             }
+             ) -> westernCalendar
+ westernCalendar
+```
+             
+####西元日期改date time class
+```{r}
+westernCalendar %>%
+  lubridate::ymd() -> datetimeCalendar
+class(datetimeCalendar)
+```
+
+```{r}
+#subsetDataTW範例
+subsetDataTWbank %>%
+  mutate(
+    年月=年月 %>%
+      stringr::str_extract_all("[:digit:]+") %>%
+      purrr::map_chr(
+                 function(x) {
+                   x1=as.integer(x[[1]])+1911
+                   x[[1]]=as.character(x1)
+                                stringr::str_c(x,collapse="-")
+                 }
+                 ),
+    年月日=stringr::str_c(年月,"01",sep="-"),
+    西元年月日=lubridate::ymd(年月日)
+  )
+```
 
 
