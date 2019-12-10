@@ -1,0 +1,536 @@
+---
+title: '20190911'
+author: "Ching-Hsuan"
+date: "2019/9/17"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r basic setup, message=FALSE, echo=TRUE, eval=T}
+library(dplyr); library(stringr); library(ggplot2); library(plotly); library(lubridate); library(readr); library(tidyr); library(showtext)
+
+font_add("QYuan","cwTeXQYuan-Medium.ttf") # 新增字體
+showtext_auto(enable=TRUE) #啟用字體
+theme_set(theme_classic())
+knitr::opts_chunk$set(out.width='80%', fig.asp=.75, fig.align='center', fig.showtext=T)
+
+source("https://www.dropbox.com/s/8ndtvzqbdb4cb93/data_visulaization_pk.R?dl=1")
+```
+
+```{r}
+library(dplyr); library(rvest); library(stringr)
+source("https://www.dropbox.com/s/4tubw8e5h3cem6w/theEconomist.R?dl=1")
+
+"https://www.economist.com/the-world-this-week/2019/11/21/politics-this-week" %>%
+  get_theWorldThisWeek() -> df_politics
+
+df_politics$continent=c("South Asia","East Asia","North America","East Asia","South Asia","North America","North America","West Asia","West Asia","West Asia","West Africa","South America","South America","South America","Europe","Australia","Europe")
+
+df_politics$country <- c("SriLanka" , "HongKong" , "America" , "SouthKorea" , "Afghanistan" , "America" , "America" , "Iran" , "Israelisettlements" , "Syria" , "BurkinaFaso,Mali,Niger" , "Brazil" , "Chile" , "Bolivia" , "Britain" , "Australia" , "Belarus")
+
+count=data.frame(table(df_politics$continent))
+```
+
+
+```{r}
+country_shapes <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = map_data('world'),
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + country_shapes + theme_linedraw() +
+  labs(title="經濟學人一週大事")+
+  scale_x_continuous(
+    limits = c(-180,180)) +
+  scale_y_continuous(
+    limits = c(-90,90))+
+  geom_point(
+    aes(x=c(-102.73,-57.83,
+            79.5, 111.5, 50.36,
+            22.395,133.15,-5),
+        y=c(39.355,-20.63,
+            21.5, 28.5, 27.845,
+            53.9,-25.65,20)),
+           #北美,南美,
+           #南亞,東亞,西亞,
+           #歐洲,澳洲,西非 
+    shape = 19,
+    size = c(10,15,10,15,10,10,5,5),
+    alpha = 0.4,
+    color = "yellow")+
+  theme(axis.title = element_blank(), 
+        axis.ticks = element_blank(), 
+        axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_blank()
+        )->figure1
+
+figure1 %>%
+  ggplotly() ->
+  pltly_figure1
+
+save(pltly_figure1,file="hw7_figure1.Rda")
+
+api_create(pltly_figure1,filename="hw7_figure1.svg",fileopt="overwrite") -> Meta_pltly_hw7_figure1
+
+
+hw7_figure1_v1 <- api_download_plot("1","Shiuan")
+
+```
+
+```{r}
+library(ggimage)
+election <- image_read2("https://cdn.hk01.com/di/media/images/13789/org/f5537544b47508dfb9a0ae38aafa2ecf.png/708CKyrEILtDazcyzLa7K4UgW9hOA7H5NVt2pDVbdqQ?v=w1920")
+
+casualties<- image_read2("http://www.hkcah.com/image/cache/data/MEIHO/ME329_1-600x600.jpg")
+
+law<- image_read2("https://st.depositphotos.com/1361798/1394/v/950/depositphotos_13948250-stock-illustration-scales-of-justice.jpg")
+
+attack<-image_read2("http://image.027website.com/uploads/20180823/23/1535039845-bYdCzjQDUn.jpg")
+
+protest <- image_read2("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxdH4FtXZEo03Dkr2_jvfVH90cuSwkCbbvn66dM7U3hYtF9hiH&s")
+
+fuel <- image_read2("https://st2.depositphotos.com/1742172/10193/v/950/depositphotos_101937586-stock-illustration-cartoon-fuel-can.jpg")
+
+issue<- image_read2("https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Commons-emblem-issue.svg/1024px-Commons-emblem-issue.svg.png")
+
+hk <- image_read2("https://s1.1zoom.me/big0/962/337990-Berserker.jpg")
+
+us<- image_read2("https://s1.1zoom.me/b5050/546/340490-Berserker_2560x1440.jpg")
+
+uk<- image_read2("https://www.newton.com.tw/img/7/661/cGcq5SZhFGN5ATMkhTNykTZ0ATNkFjNzMDM2EGN1kDNzEjYjFjYkhjZkZWNv0WZ0l2LjlGcvU2apFmYv02bj5SdklWYi5yYyN3Ztl2LvoDc0RHa.jpg")
+
+aus<- image_read2("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Flag_of_Australia.svg/600px-Flag_of_Australia.svg.png")
+
+eu<- image_read2("https://sohfrance.org/wp-content/uploads/2015/11/EuropeFlagCMYKcopie.jpg")
+
+ukr<- image_read2("https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Ukraine.svg")
+
+rus<- image_read2("https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/255px-Flag_of_Russia.svg.png")
+
+isr <- image_read2("https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Israel.svg")
+
+ir<- image_read2("https://upload.wikimedia.org/wikipedia/commons/c/ca/Flag_of_Iran.svg")
+
+br<- image_read2("https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/243px-Flag_of_Brazil.svg.png")
+
+swe<- image_read2("https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Sweden.svg")
+
+un<- image_read2("https://www.geographyrealm.com/wp-content/uploads/2016/11/UN-flag-1947.png")
+```
+
+
+
+```{r}
+#South Asia
+South.Asia <- map_data("world",region=c("Sri Lanka","Afghanistan"))
+South_Asia <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = South.Asia,
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + South_Asia+coord_quickmap()+theme_linedraw() +
+  scale_x_continuous(
+    limits = c(60,83)) +
+  scale_y_continuous(
+    limits = c(5,43))+
+  labs(title="South Asia")+
+  annotation_raster(election,
+                    76,79,12,15)+
+  annotation_raster(casualties,
+                    79,82,12,15)+
+  annotation_raster(attack,
+                    82,85,12,15)+
+  annotation_raster(us,
+                    74,76.5,38,40)+
+  annotation_raster(aus,
+                    77,80,38,40)+
+  annotation_raster(attack,
+                    80,83,38,41)+
+  annotate("text",
+           x=66.5,
+           y=39,
+           label=paste("Afghanistan"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=80,
+           y=10.8,
+           label=paste("Sri Lanka"),
+           size=3,
+           colour="brown")+
+ theme(axis.ticks = element_blank(),
+       panel.grid.minor = element_blank(),
+       panel.grid.major.x = element_blank(),
+       panel.grid.major.y = element_blank()) ->figure2
+
+figure2 %>%
+  ggplotly ()->
+  pltly_figure2
+
+save(pltly_figure2,file="hw7_figure2.Rda")
+
+
+#East Asia
+East.Asia<-map_data("world",region=c("China","South Korea"))
+
+East_Asia <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = East.Asia,
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + East_Asia+coord_quickmap()+theme_linedraw() +
+  labs(title="East Asia")+
+  annotation_raster(law,
+                    124,127,19,22)+
+  annotation_raster(attack,
+                    127,130,19,22)+
+  annotation_raster(protest,
+                    130,133,19,22)+
+  annotation_raster(us,
+                    124,127,29,31)+
+  annotation_raster(attack,
+                    127,130,28,31)+
+  annotate("text",
+           x=118,
+           y=21,
+           label=paste("Hong Kong"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=128,
+           y=33,
+           label=paste("South Korea"),
+           size=3,
+           colour="brown")+
+ theme(axis.ticks = element_blank(),
+       panel.grid.minor = element_blank(),
+       panel.grid.major.x = element_blank(),
+       panel.grid.major.y = element_blank())->figure3
+
+
+figure3 %>%
+  ggplotly() ->
+  pltly_figure3
+
+save(pltly_figure3,file="hw7_figure3.Rda")
+
+
+#West Asia
+
+West.Asia <- map_data("world",region=c("Israel","Iran","Syria"))
+West_Asia <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = West.Asia,
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + West_Asia+coord_quickmap()+theme_linedraw() +
+  labs(title="West Asia")+
+  annotation_raster(election,
+                    34,35.5,27,28.5)+
+  annotation_raster(us,
+                    35.5,37,27.5,28.5)+
+  annotation_raster(law,
+                    37,38.5,27,28.5)+
+  annotation_raster(ir,
+                    52,53.4,24.5,25.5)+
+  annotation_raster(isr,
+                    54,55.5,24.5,25.5)+
+  annotation_raster(attack,
+                    55.5,57.5,24,25.5)+
+  annotation_raster(fuel,
+                    38,40,31,33)+
+  annotation_raster(protest,
+                    40,42,31,33)+
+  annotation_raster(casualties,
+                    42,44,31,33)+
+  annotate("text",
+           x=35,
+           y=29,
+           label=paste("Israel"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=40,
+           y=33,
+           label=paste("Iran"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=55,
+           y=26,
+           label=paste("Syria"),
+           size=3,
+           colour="brown")+
+ theme(axis.ticks = element_blank(),
+       panel.grid.minor = element_blank(),
+       panel.grid.major.x = element_blank(),
+       panel.grid.major.y = element_blank())->figure4
+
+
+figure4 %>%
+  ggplotly() ->
+  pltly_figure4
+
+save(pltly_figure4,file="hw7_figure4.Rda")
+
+
+#North America
+North.America <- map_data("world",region="US")
+North_America <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = North.America,
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + North_America + coord_quickmap() + theme_linedraw() +
+  labs(title="North America")+
+  scale_x_continuous(
+    limits = c(-126,-67)) +
+  scale_y_continuous(
+    limits = c(25,50))+
+  annotation_raster(issue,
+                    -111,-108,23,26)+
+  annotation_raster(law,
+                    -107.5,-104.5,23,26)+
+  annotation_raster(hk,
+                    -104,-101.5,24,26)+
+  annotation_raster(rus,
+                    -101,-98.5,24,26)+
+  annotation_raster(eu,
+                    -98,-95.5,24,26)+
+  annotation_raster(ukr,
+                    -95,-92,24,26)+
+  annotate("text",
+           x=-100,
+           y=40,
+           label=paste("US"),
+           size=3,
+           colour="brown")+
+ theme(axis.ticks = element_blank(),
+       panel.grid.minor = element_blank(),
+       panel.grid.major.x = element_blank(),
+       panel.grid.major.y = element_blank())->figure5
+
+figure5 %>%
+  ggplotly() ->
+  pltly_figure5
+
+save(pltly_figure5,file="hw7_figure5.Rda")
+
+#South America
+South.America <- map_data("world",
+                          region=c("Brazil","Chile","Bolivia"))
+South_America <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = South.America,
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + South_America + coord_quickmap() + theme_linedraw() +
+  labs(title="South America")+
+  scale_x_continuous(
+    limits = c(-75,-34)) +
+  scale_y_continuous(
+    limits = c(-57,5))+
+  annotation_raster(issue,
+                    -42,-38,-30,-26)+
+  annotation_raster(protest,
+                    -62,-57,-31,-37)+
+  annotation_raster(law,
+                    -62,-57,-35,-31)+
+  annotation_raster(election,
+                    -62,-57,-39,-35)+
+  annotation_raster(protest,
+                    -62,-58,-57,-61)+
+  annotation_raster(casualties,
+                    -58,-54,-57,-61)+
+  annotation_raster(election,
+                    -54,-50,-57,-61)+
+  annotate("text",
+           x=-67,
+           y=-57,
+           label=paste("Chile"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=-40,
+           y=-24,
+           label=paste("Brazil"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=-61,
+           y=-24,
+           label=paste("Bolivia"),
+           size=3,
+           colour="brown")+
+ theme(axis.ticks = element_blank(),
+       panel.grid.minor = element_blank(),
+       panel.grid.major.x = element_blank(),
+       panel.grid.major.y = element_blank())->figure6
+
+figure6 %>%
+  ggplotly() ->
+  pltly_figure6
+
+save(pltly_figure6,file="hw7_figure6.Rda")
+
+#Europe
+Europe. <- map_data("world",
+                          region=c("uk","Belarus"))
+Europe_ <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = Europe.,
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + Europe_ + coord_quickmap() + theme_linedraw() +
+  labs(title="Europe")+
+  annotation_raster(protest,
+                    2,5,49,51.5)+
+  annotation_raster(election,
+                    5,8,49,51.5)+
+  annotation_raster(election,
+                    27,30,47.5,50)+
+  annotate("text",
+           x=0,
+           y=49.5,
+           label=paste("UK"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=28,
+           y=50.5,
+           label=paste("Belarus"),
+           size=3,
+           colour="brown")+
+ theme(axis.ticks = element_blank(),
+       panel.grid.minor = element_blank(),
+       panel.grid.major.x = element_blank(),
+       panel.grid.major.y = element_blank())->figure7
+
+figure7 %>%
+  ggplotly() ->
+  pltly_figure7
+
+save(pltly_figure7,file="hw7_figure7.Rda")
+
+#Australia
+Australia. <- map_data("world",region="Australia")
+Australia_ <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = Australia.,
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + Australia_ + coord_quickmap() + theme_linedraw() +
+  labs(title="Australia")+
+  scale_x_continuous(
+    limits = c(110,155)) +
+  scale_y_continuous(
+    limits = c(-44,-9))+
+  annotation_raster(swe,
+                    125,128,-37,-35)+
+  annotation_raster(law,
+                    128,131,-38,-35)+
+  annotation_raster(uk,
+                    131,134,-37,-35)+
+  annotate("text",
+           x=130,
+           y=-33,
+           label=paste("Australia"),
+           size=3,
+           colour="brown")+
+ theme(axis.ticks = element_blank(),
+       panel.grid.minor = element_blank(),
+       panel.grid.major.x = element_blank(),
+       panel.grid.major.y = element_blank())->figure8
+
+figure8 %>%
+  ggplotly() ->
+  pltly_figure8
+
+save(pltly_figure8,file="hw7_figure8.Rda")
+
+#West Africa
+West.Africa <- map_data("world",
+                          region=c("Burkina Faso","Mali","Niger"))
+West_Africa <- 
+  geom_polygon(aes(x = long,
+                   y = lat,
+                   group = group),
+               data = West.Africa,
+               fill = "#CECECE",
+               color = "#515151",
+               size = 0.15)
+
+ggplot() + West_Africa + coord_quickmap() + theme_linedraw() +
+  labs(title="West Africa")+
+  annotation_raster(un,
+                    -11,-9.5,17,18)+
+  annotation_raster(issue,
+                    -9,-7.5,17,18.5)+
+  annotate("text",
+           x=-9,
+           y=16.5,
+           label=paste("Burkina Faso"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=0,
+           y=10,
+           label=paste("Mali"),
+           size=3,
+           colour="brown")+
+  annotate("text",
+           x=10,
+           y=24,
+           label=paste("Niger"),
+           size=3,
+           colour="brown")+
+ theme(axis.ticks = element_blank(),
+       panel.grid.minor = element_blank(),
+       panel.grid.major.x = element_blank(),
+       panel.grid.major.y = element_blank())->figure9
+
+figure9 %>%
+  ggplotly() ->
+  pltly_figure9
+
+save(pltly_figure9,file="hw7_figure9.Rda")
+
+```
+

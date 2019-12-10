@@ -1,0 +1,114 @@
+---
+title: "經濟學人一週大事"
+author: "簡靖軒_710861131"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r basic setup, message=FALSE, echo=FALSE, eval=T}
+rm(list=ls())
+library(dplyr); library(stringr); library(ggplot2); library(plotly); library(lubridate); library(readr); library(colorspace); library(grDevices); library(shiny); library(shinyjs); library(scales)
+library(tidyr); library(showtext); library(tidyverse); library(colorspace);
+library(flexdashboard);
+library(maps);
+library(svglite)
+library(htmlwidgets)
+library(ggimage)
+
+#font_add("QYuan","cwTeXQYuan-Medium.ttf") # 新增字體
+showtext_auto(enable=TRUE) #啟用字體
+theme_set(theme_classic())
+knitr::opts_chunk$set(fig.align='center', fig.showtext=T)
+
+```
+
+
+
+
+
+
+Column {data-width=200}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+load("hw7_figure1.Rda")
+pltly_figure1
+
+
+
+```
+
+
+Column {data-width=100}
+-----------------------------------------------------------------------
+
+### Chart B-1
+
+```{r}
+
+load("hw7_figure2.Rda")
+pltly_figure2
+
+```
+
+### Chart B-2
+
+```{r}
+load("hw7_figure3.Rda")
+pltly_figure3
+
+```
+
+### Chart B-3
+
+```{r}
+load("hw7_figure4.Rda")
+pltly_figure4
+
+```
+
+### Chart B-4
+
+```{r}
+load("hw7_figure5.Rda")
+pltly_figure5
+
+```
+
+### Chart B-5
+
+```{r}
+load("hw7_figure6.Rda")
+pltly_figure6
+
+```
+
+### Chart B-6
+
+```{r}
+load("hw7_figure7.Rda")
+pltly_figure7
+
+```
+
+### Chart B-7
+
+```{r}
+load("hw7_figure8.Rda")
+pltly_figure8
+
+```
+
+### Chart B-8
+
+```{r}
+load("hw7_figure9.Rda")
+pltly_figure9
+
+```
