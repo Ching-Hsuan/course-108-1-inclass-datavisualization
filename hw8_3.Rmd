@@ -1,0 +1,115 @@
+---
+title: "hw8_UFO"
+output: 
+  flexdashboard::flex_dashboard
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+---
+```{r}
+load("hw8_pltly_movie_p11.Rda")
+load("hw8_pltly_movie_p22.Rda")
+load("hw8_pltly_movie_p33.Rda")
+load("hw8_pltly_Xmas_p11.Rda")
+load("hw8_pltly_Xmas_p22.Rda")
+load("hw8_pltly_Xmas_p33.Rda")
+load("hw8_pltly_toy_p11.Rda")
+load("hw8_pltly_toy_p22.Rda")
+load("hw8_pltly_toy_p33.Rda")
+load("hw8_pltly_text.Rda")
+```
+
+
+
+wday&period {data-navmenu="movie"}
+=====================================
+```{r}
+pltly_movie_p11
+```
+
+wday&media {data-navmenu="movie"}
+=====================================  
+```{r}
+pltly_movie_p22
+```
+
+period&media {data-navmenu="movie"}
+=====================================  
+```{r}
+pltly_movie_p33
+```
+
+summary {data-navmenu="movie"}
+===================================== 
+```{r}
+movie_table <- data.frame(
+  media=c("facebook:16","poster:10","website:19","","","",""),
+  period=c("mornig:1","noon:23","night:21","","","",""),
+  wday=c("週一:7","週二:0","週三:12","週四:5",
+         "週五:2","週六:0","週日:19"),
+  check.names = F)
+movie_table
+```
+
+wday&period {data-navmenu="toy"}
+=====================================
+```{r}
+pltly_toy_p11
+```
+
+wday&media {data-navmenu="toy"}
+=====================================  
+```{r}
+pltly_toy_p22
+```
+
+period&media {data-navmenu="toy"}
+=====================================  
+```{r}
+pltly_toy_p33
+```
+
+summary {data-navmenu="toy"}
+===================================== 
+```{r}
+toy_table <- data.frame(
+  media=c("facebook:34","poster:28","website:37","","","",""),
+  period=c("mornig:6"," noon:34","night:59","","","",""),
+  wday=c("週一:5","週二:21","週三:24","週四:10",
+         "週五:27","週六:12","週日:0"),
+  check.names = F)
+toy_table
+```
+
+wday&period {data-navmenu="Xmas"}
+=====================================
+```{r}
+pltly_Xmas_p11
+```
+
+wday&media {data-navmenu="Xmas"}
+=====================================  
+```{r}
+pltly_Xmas_p22
+```
+
+period&media {data-navmenu="Xmas"}
+=====================================  
+```{r}
+pltly_Xmas_p33
+```
+
+summary {data-navmenu="Xmas"}
+=====================================  
+```{r}
+Xmas_table <- data.frame(
+  media=c("facebook:12","poster:14","website:15","","","",""),
+  period=c("mornig:2","noon:18","night:21","","","",""),
+  wday=c("週一:24","週二:26","週三:1","週四:0",
+         "週五:0","週六:0","週日:0"),
+  check.names = F)
+Xmas_table
+```
