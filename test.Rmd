@@ -1,0 +1,100 @@
+---
+title: "UFO"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    social: menu
+runtime: shiny
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+library(datasets)
+library(shiny)
+library(readr)
+library(dplyr); library(stringr); library(ggplot2); library(plotly); library(lubridate); library(readr); library(tidyr); library(showtext)
+data(iris)
+```
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+load("hw8_pltly_movie_p11.Rda")
+load("hw8_pltly_movie_p22.Rda")
+load("hw8_pltly_movie_p33.Rda")
+load("hw8_pltly_Xmas_p11.Rda")
+load("hw8_pltly_Xmas_p22.Rda")
+load("hw8_pltly_Xmas_p33.Rda")
+load("hw8_pltly_toy_p11.Rda")
+load("hw8_pltly_toy_p22.Rda")
+load("hw8_pltly_toy_p33.Rda")
+load("hw8_pltly_text.Rda")
+
+
+
+X_Variable=c("wday","period")
+Y_Variable=c("period","media")
+activity=c("movie" ,"Xmas"  ,"toy")
+
+selectInput('xcol', 'X_Variable', X_Variable)
+    
+selectInput('ycol', 'Y_Variable', Y_Variable)
+
+selectInput('activity', 'activity', activity)
+
+```
+
+Column
+-----------------------------------------------------------------------
+
+### frequency
+
+```{r}
+
+renderPlotly({
+    if(input$activity=="movie"){
+      if(input$xcol=="wday") {
+        if(input$ycol=="period"){
+          pltly_movie_p11} else if (input$ycol=="media"){
+            pltly_movie_p22}
+      }}
+  
+    if(input$activity=="movie"){
+      if(input$xcol=="period") {
+        if(input$ycol=="period") {
+          pltly_text } else if (input$ycol=="media") {
+            pltly_movie_p33}
+      }}
+  
+    if(input$activity=="toy"){
+      if(input$xcol=="wday") {
+        if(input$ycol=="period"){
+          pltly_toy_p11} else if (input$ycol=="media"){
+            pltly_toy_p22}
+      }}
+  
+    if(input$activity=="toy"){
+      if(input$xcol=="period") {
+        if(input$ycol=="period") {
+          pltly_text } else if (input$ycol=="media") {
+            pltly_toy_p33}
+      }}
+    if(input$activity=="Xmas"){
+      if(input$xcol=="wday") {
+        if(input$ycol=="period"){
+          pltly_Xmas_p11} else if (input$ycol=="media"){
+            pltly_Xmas_p22}
+      }} 
+     if(input$activity=="Xmas") {
+       if(input$xcol=="period") {
+        if(input$ycol=="period") {
+          pltly_text } else if (input$ycol=="media") {
+            pltly_Xmas_p33}
+      }}
+      })
+
+```
