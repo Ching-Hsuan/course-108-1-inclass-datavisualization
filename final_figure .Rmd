@@ -1,0 +1,2141 @@
+---
+title: 'final'
+author: "Ching-Hsuan"
+date: "2020/01/25"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#所需套件
+```{r basic setup, message=FALSE, echo=TRUE, eval=T}
+library(dplyr); library(stringr); library(ggplot2); library(plotly); library(lubridate); library(readr); library(tidyr);library(ggrepel) library(showtext);library(ggpubr);library(ggiraph);library(plyr);
+library(reshape2);library(moonBook);library(sjmisc);
+library(ggiraphExtra);library(plotrix);library(ggradar);
+library(scales);library(tibble)
+
+font_add("QYuan","cwTeXQYuan-Medium.ttf") # 新增字體
+showtext_auto(enable=TRUE) #啟用字體
+theme_set(theme_classic())
+knitr::opts_chunk$set(out.width='80%', fig.asp=.75, fig.align='center', fig.showtext=T)
+
+source("https://www.dropbox.com/s/8ndtvzqbdb4cb93/data_visulaization_pk.R?dl=1")
+```
+
+#整理出的檔案
+```{r}
+fAcc1=read_csv("fAcc1.csv",locale = locale(encoding = "utf-8"))
+save(fAcc1,file = "fAcc1.Rda")
+fAcc2=read_csv("fAcc2.csv",locale = locale(encoding = "utf-8"))
+save(fAcc2,file = "fAcc2.Rda")
+fAcc3=read_csv("fAcc3.csv",locale = locale(encoding = "utf-8"))
+save(fAcc3,file = "fAcc3.Rda")
+fAcc4=read_csv("fAcc4.csv",locale = locale(encoding = "utf-8"))
+save(fAcc4,file = "fAcc4.Rda")
+
+fEcon1=read_csv("fEcon1.csv",locale = locale(encoding = "utf-8"))
+save(fEcon1,file = "fEcon1.Rda")
+fEcon2=read_csv("fEcon2.csv",locale = locale(encoding = "utf-8"))
+save(fEcon2,file = "fEcon2.Rda")
+fEcon3=read_csv("fEcon3.csv",locale = locale(encoding = "utf-8"))
+save(fEcon3,file = "fEcon3.Rda")
+fEcon4=read_csv("fEcon4.csv",locale = locale(encoding = "utf-8"))
+save(fEcon4,file = "fEcon4.Rda")
+
+fStat1=read_csv("fStat1.csv",locale = locale(encoding = "utf-8"))
+save(fStat1,file = "fStat1.Rda")
+fStat2=read_csv("fStat2.csv",locale = locale(encoding = "utf-8"))
+save(fStat2,file = "fStat2.Rda")
+fStat3=read_csv("fStat3.csv",locale = locale(encoding = "utf-8"))
+save(fStat3,file = "fStat3.Rda")
+fStat4=read_csv("fStat4.csv",locale = locale(encoding = "utf-8"))
+save(fStat4,file = "fStat4.Rda")
+
+fAcc11=read.csv("fAcc11.csv",encoding = "UTF-8-BOM")
+save(fAcc11,file="fAcc11.Rda")
+fAcc12=read.csv("fAcc12.csv",encoding = "UTF-8-BOM")
+save(fAcc12,file="fAcc12.Rda")
+fAcc21=read.csv("fAcc21.csv",encoding = "UTF-8-BOM")
+save(fAcc21,file="fAcc21.Rda")
+fAcc22=read.csv("fAcc22.csv",encoding = "UTF-8-BOM")
+save(fAcc22,file="fAcc22.Rda")
+fAcc31=read.csv("fAcc31.csv",encoding = "UTF-8-BOM")
+save(fAcc31,file="fAcc31.Rda")
+fAcc32=read.csv("fAcc32.csv",encoding = "UTF-8-BOM")
+save(fAcc32,file="fAcc32.Rda")
+fAcc41=read.csv("fAcc41.csv",encoding = "UTF-8-BOM")
+save(fAcc41,file="fAcc41.Rda")
+fAcc42=read.csv("fAcc42.csv",encoding = "UTF-8-BOM")
+save(fAcc42,file="fAcc42.Rda")
+
+
+fEcon11=read_csv("fEcon11.csv",locale = locale(encoding = "utf-8"))
+save(fEcon11,file = "fEcon11.Rda")
+fEcon12=read_csv("fEcon12.csv",locale = locale(encoding = "utf-8"))
+save(fEcon12,file = "fEcon12.Rda")
+fEcon21=read_csv("fEcon21.csv",locale = locale(encoding = "utf-8"))
+save(fEcon21,file = "fEcon21.Rda")
+fEcon22=read_csv("fEcon22.csv",locale = locale(encoding = "utf-8"))
+save(fEcon22,file = "fEcon22.Rda")
+fEcon31=read_csv("fEcon31.csv",locale = locale(encoding = "utf-8"))
+save(fEcon31,file = "fEcon31.Rda")
+fEcon32=read_csv("fEcon32.csv",locale = locale(encoding = "utf-8"))
+save(fEcon32,file = "fEcon32.Rda")
+fEcon41=read_csv("fEcon41.csv",locale = locale(encoding = "utf-8"))
+save(fEcon41,file = "fEcon41.Rda")
+fEcon42=read_csv("fEcon42.csv",locale = locale(encoding = "utf-8"))
+save(fEcon42,file = "fEcon42.Rda")
+
+
+
+fStat1=read_csv("fStat1.csv",locale = locale(encoding = "utf-8"))
+save(fStat1,file = "fStat1.Rda")
+fStat2=read_csv("fStat2.csv",locale = locale(encoding = "utf-8"))
+save(fStat2,file = "fStat2.Rda")
+fStat3=read_csv("fStat3.csv",locale = locale(encoding = "utf-8"))
+save(fStat3,file = "fStat3.Rda")
+fStat4=read_csv("fStat4.csv",locale = locale(encoding = "utf-8"))
+save(fStat1,file = "fStat1.Rda")
+
+
+
+fStat11=read_csv("fStat11.csv",locale = locale(encoding = "utf-8"))
+save(fStat11,file = "fStat11.Rda")
+fStat12=read_csv("fStat12.csv",locale = locale(encoding = "utf-8"))
+save(fStat12,file = "fStat12.Rda")
+fStat21=read_csv("fStat21.csv",locale = locale(encoding = "utf-8"))
+save(fStat21,file = "fStat21.Rda")
+fStat22=read_csv("fStat22.csv",locale = locale(encoding = "utf-8"))
+save(fStat22,file = "fStat22.Rda")
+fStat31=read_csv("fStat31.csv",locale = locale(encoding = "utf-8"))
+save(fStat31,file = "fStat31.Rda")
+fStat32=read_csv("fStat32.csv",locale = locale(encoding = "utf-8"))
+save(fStat32,file = "fStat32.Rda")
+fStat41=read_csv("fStat41.csv",locale = locale(encoding = "utf-8"))
+save(fStat41,file = "fStat41.Rda")
+fStat42=read_csv("fStat42.csv",locale = locale(encoding = "utf-8"))
+save(fStat42,file = "fStat42.Rda")
+
+Acc1_credit=read_csv("Acc1_credit.csv",locale = locale(encoding = "utf-8"))
+Acc2_credit=read_csv("Acc2_credit.csv",locale = locale(encoding = "utf-8"))
+Acc3_credit=read_csv("Acc3_credit.csv",locale = locale(encoding = "utf-8"))
+Acc4_credit=read_csv("Acc4_credit.csv",locale = locale(encoding = "utf-8"))
+save(Acc1_credit,file = "Acc1_credit.Rda")
+save(Acc2_credit,file = "Acc2_credit.Rda")
+save(Acc3_credit,file = "Acc3_credit.Rda")
+save(Acc4_credit,file = "Acc4_credit.Rda")
+
+
+Econ1_credit=read_csv("Econ1_credit.csv",locale = locale(encoding = "utf-8"))
+Econ2_credit=read_csv("Econ2_credit.csv",locale = locale(encoding = "utf-8"))
+Econ3_credit=read_csv("Econ3_credit.csv",locale = locale(encoding = "utf-8"))
+Econ4_credit=read_csv("Econ4_credit.csv",locale = locale(encoding = "utf-8"))
+save(Econ1_credit,file = "Econ1_credit.Rda")
+save(Econ2_credit,file = "Econ2_credit.Rda")
+save(Econ3_credit,file = "Econ3_credit.Rda")
+save(Econ4_credit,file = "Econ4_credit.Rda")
+
+
+Stat1_credit=read_csv("Stat1_credit.csv",locale = locale(encoding = "utf-8"))
+Stat2_credit=read_csv("Stat2_credit.csv",locale = locale(encoding = "utf-8"))
+Stat3_credit=read_csv("Stat3_credit.csv",locale = locale(encoding = "utf-8"))
+Stat4_credit=read_csv("Stat4_credit.csv",locale = locale(encoding = "utf-8"))
+save(Stat1_credit,file = "Stat1_credit.Rda")
+save(Stat2_credit,file = "Stat2_credit.Rda")
+save(Stat3_credit,file = "Stat3_credit.Rda")
+save(Stat4_credit,file = "Stat4_credit.Rda")
+
+save(Acc_f1,file = "Acc_f1.Rda")
+save(Acc_f2,file = "Acc_f2.Rda")
+save(Acc_f3,file = "Acc_f3.Rda")
+save(Acc_f4,file = "Acc_f4.Rda")
+
+save(Econ_f1,file = "Econ_f1.Rda")
+save(Econ_f2,file = "Econ_f2.Rda")
+save(Econ_f3,file = "Econ_f3.Rda")
+save(Econ_f4,file = "Econ_f4.Rda")
+
+save(Stat_f1,file = "Stat_f1.Rda")
+save(Stat_f2,file = "Stat_f2.Rda")
+save(Stat_f3,file = "Stat_f3.Rda")
+save(Stat_f4,file = "Stat_f4.Rda")
+
+
+save(Acc_f11,file = "Acc_f11.Rda")
+save(Acc_f21,file = "Acc_f21.Rda")
+save(Acc_f31,file = "Acc_f31.Rda")
+save(Acc_f41,file = "Acc_f41.Rda")
+save(Acc_f12,file = "Acc_f12.Rda")
+save(Acc_f22,file = "Acc_f22.Rda")
+save(Acc_f32,file = "Acc_f32.Rda")
+save(Acc_f42,file = "Acc_f42.Rda")
+
+save(Econ_f11,file = "Econ_f11.Rda")
+save(Econ_f21,file = "Econ_f21.Rda")
+save(Econ_f31,file = "Econ_f31.Rda")
+save(Econ_f41,file = "Econ_f41.Rda")
+save(Econ_f12,file = "Econ_f12.Rda")
+save(Econ_f22,file = "Econ_f22.Rda")
+save(Econ_f32,file = "Econ_f32.Rda")
+save(Econ_f42,file = "Econ_f42.Rda")
+
+save(Stat_f11,file = "Stat_f11.Rda")
+save(Stat_f21,file = "Stat_f21.Rda")
+save(Stat_f31,file = "Stat_f31.Rda")
+save(Stat_f41,file = "Stat_f41.Rda")
+save(Stat_f12,file = "Stat_f12.Rda")
+save(Stat_f22,file = "Stat_f22.Rda")
+save(Stat_f32,file = "Stat_f32.Rda")
+save(Stat_f42,file = "Stat_f42.Rda")
+
+```
+
+
+#data
+```{r}
+load("C:/Users/SHIUAN/Downloads/finalProject.Rda")
+
+gradeData2=select(gradeData,
+       -授課語言,-科目代碼,-班別,學年)
+
+gradeData2$上課時間及教室=substr(
+  gradeData2$上課時間及教室,1,6)
+gradeData2$星期=substr(
+  gradeData2$上課時間及教室,3,3)
+gradeData2$節次=substr(
+  gradeData2$上課時間及教室,4,6)
+
+gradeData2=gradeData2[-11]
+colnames(gradeData2)=c("系級","學期成績","科目名稱",
+                       "學分數","開課系所","修課人數",
+                       "授課老師","學年","學期",
+                       "選修別","星期","節次")
+gradeData2$科目名稱=gsub("國文：經典閱讀與詮釋", "國文",
+                     gradeData2$科目名稱)
+
+Stat=gradeData2[grepl("統計學",gradeData2$系級),]
+Stat_all=select(Stat,
+       學年,學期,科目名稱,選修別,授課老師,學分數,學期成績)
+Stat1=Stat_all[grepl("100",Stat_all$學年),][-1]
+Stat2=Stat_all[grepl("101",Stat_all$學年),][-1]
+Stat3=Stat_all[grepl("102",Stat_all$學年),][-1]
+Stat4=Stat_all[grepl("103",Stat_all$學年),][-1]
+Stat11=Stat1[grepl("1",Stat1$學期),][-1]
+Stat12=Stat1[grepl("2",Stat1$學期),][-1]
+Stat21=Stat2[grepl("1",Stat2$學期),][-1]
+Stat22=Stat2[grepl("2",Stat2$學期),][-1]
+Stat31=Stat3[grepl("1",Stat3$學期),][-1]
+Stat32=Stat3[grepl("2",Stat3$學期),][-1]
+Stat41=Stat4[grepl("1",Stat4$學期),][-1]
+Stat42=Stat4[grepl("2",Stat4$學期),][-1]
+Econ=gradeData2[grepl("經濟學",gradeData2$系級),]
+Econ_all=select(Econ,
+       學年,學期,科目名稱,選修別,授課老師,學分數,學期成績)
+Econ1=Econ_all[grepl("100",Econ_all$學年),][-1]
+Econ2=Econ_all[grepl("101",Econ_all$學年),][-1]
+Econ3=Econ_all[grepl("102",Econ_all$學年),][-1]
+Econ4=Econ_all[grepl("103",Econ_all$學年),][-1]
+Econ11=Econ1[grepl("1",Econ1$學期),][-1]
+Econ12=Econ1[grepl("2",Econ1$學期),][-1]
+Econ21=Econ2[grepl("1",Econ2$學期),][-1]
+Econ22=Econ2[grepl("2",Econ2$學期),][-1]
+Econ31=Econ3[grepl("1",Econ3$學期),][-1]
+Econ32=Econ3[grepl("2",Econ3$學期),][-1]
+Econ41=Econ4[grepl("1",Econ4$學期),][-1]
+Econ42=Econ4[grepl("2",Econ4$學期),][-1]
+
+Acc=gradeData2[grepl("會計學",gradeData2$系級),]
+Acc_all=select(Acc,
+       學年,學期,科目名稱,選修別,授課老師,學分數,學期成績)
+Acc1=Acc_all[grepl("100",Acc_all$學年),][-1]
+Acc2=Acc_all[grepl("101",Acc_all$學年),][-1]
+Acc3=Acc_all[grepl("102",Acc_all$學年),][-1]
+Acc4=Acc_all[grepl("103",Acc_all$學年),][-1]
+Acc11=Acc1[grepl("1",Acc1$學期),][-1]
+Acc12=Acc1[grepl("2",Acc1$學期),][-1]
+Acc21=Acc2[grepl("1",Acc2$學期),][-1]
+Acc22=Acc2[grepl("2",Acc2$學期),][-1]
+Acc31=Acc3[grepl("1",Acc3$學期),][-1]
+Acc32=Acc3[grepl("2",Acc3$學期),][-1]
+Acc41=Acc4[grepl("1",Acc4$學期),][-1]
+Acc42=Acc4[grepl("2",Acc4$學期),][-1]
+```
+
+
+#Acc
+##全部
+```{r}
+Acc_all_加權=Acc_all[6]*Acc_all[7]
+Acc_all_必=Acc_all[grepl("必",Acc_all$選修別),]
+Acc_all_必_加權=Acc_all_必[6]*Acc_all_必[7]
+Acc_all_選=Acc_all[grepl("選",Acc_all$選修別),]
+Acc_all_選_加權=Acc_all_選[6]*Acc_all_選[7]
+Acc_all_通=Acc_all[grepl("通",Acc_all$選修別),]
+Acc_all_通_加權=Acc_all_通[6]*Acc_all_通[7]
+
+cat("您總共修了",nrow(Acc_all),"門課，\n 共",
+    sum(Acc_all$學分數),"學分，\n 總平均為",
+    sum(Acc_all_加權)/sum(Acc_all$學分數),"分;\n\n其中，修了\n ",sum(Acc_all_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc_all_必$學分數),"學分，\n   平均為",
+    sum(Acc_all_必_加權)/sum(Acc_all_必$學分數),"分;\n ",sum(Acc_all_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc_all_選$學分數),"學分，\n   平均為",
+    sum(Acc_all_選_加權)/sum(Acc_all_選$學分數),"分;\n ",sum(Acc_all_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc_all_通$學分數),"學分，\n   平均為",
+    sum(Acc_all_通_加權)/sum(Acc_all_通$學分數),"分。")
+
+```
+
+
+##第一學年
+```{r}
+#全部
+Acc1_加權=Acc1[5]*Acc1[6]
+Acc1_必=Acc1[grepl("必",Acc1$選修別),]
+Acc1_必_加權=Acc1_必[5]*Acc1_必[6]
+Acc1_選=Acc1[grepl("選",Acc1$選修別),]
+Acc1_選_加權=Acc1_選[5]*Acc1_選[6]
+Acc1_通=Acc1[grepl("通",Acc1$選修別),]
+Acc1_通_加權=Acc1_通[5]*Acc1_通[6]
+cat("您總共修了",nrow(Acc1),"門課，\n 共",
+    sum(Acc1$學分數),"學分，\n 總平均為",
+    sum(Acc1_加權)/sum(Acc1$學分數),"分;\n\n其中，修了\n ",sum(Acc1_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc1_必$學分數),"學分，\n   平均為",
+    sum(Acc1_必_加權)/sum(Acc1_必$學分數),"分;\n ",sum(Acc1_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc1_選$學分數),"學分，\n   平均為",
+    sum(Acc1_選_加權)/sum(Acc1_選$學分數),"分;\n ",sum(Acc1_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc1_通$學分數),"學分，\n   平均為",
+    sum(Acc1_通_加權)/sum(Acc1_通$學分數),"分。")
+```
+###第一學期
+```{R}
+#全部
+Acc11_加權=Acc11[4]*Acc11[5]
+
+data_Acc11=t(transmute(Acc11,科目名稱,學期成績))
+colnames(data_Acc11) <- data_Acc11[1,]
+data_Acc11=data_Acc11[-1,]
+data_Acc11=t(data_Acc11)
+fAcc11=read_csv("fAcc11.csv", header=TRUE)
+
+
+Acc_f11=ggradar(fAcc11,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+save(Acc_f11,file="Acc_f11.Rda")
+
+Acc11_必=Acc11[grepl("必",Acc11$選修別),]
+Acc11_必_加權=Acc11_必[4]*Acc11_必[5]
+Acc11_選=Acc11[grepl("選",Acc11$選修別),]
+Acc11_選_加權=Acc11_選[4]*Acc11_選[5]
+Acc11_通=Acc11[grepl("通",Acc11$選修別),]
+Acc11_通_加權=Acc11_通[4]*Acc11_通[5]
+
+cat("您總共修了",nrow(Acc11),"門課，\n 共",
+    sum(Acc11$學分數),"學分，\n 總平均為",
+    sum(Acc11_加權)/sum(Acc11$學分數),"分;\n\n其中，修了\n ",sum(Acc11_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc11_必$學分數),"學分，\n   平均為",
+    sum(Acc11_必_加權)/sum(Acc11_必$學分數),"分;\n ",sum(Acc11_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc11_選$學分數),"學分，\n   平均為",
+    sum(Acc11_選_加權)/sum(Acc11_選$學分數),"分;\n ",sum(Acc11_通$選修別=="通"),"門通識。")
+```
+
+###第二學期
+```{R}
+#全部
+Acc12_加權=Acc12[4]*Acc12[5]
+
+data_Acc12=t(transmute(Acc12,科目名稱,學期成績))
+colnames(data_Acc12) <- data_Acc12[1,]
+data_Acc12=data_Acc12[-1,]
+data_Acc12=t(data_Acc12)
+fAcc12=read.csv("fAcc12.csv",encoding = "UTF-8")
+save(fAcc12,file="fAcc12.Rda")
+
+Acc_f12=ggradar(fAcc12,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Acc12_必=Acc12[grepl("必",Acc12$選修別),]
+Acc12_必_加權=Acc12_必[4]*Acc12_必[5]
+Acc12_選=Acc12[grepl("選",Acc12$選修別),]
+Acc12_選_加權=Acc12_選[4]*Acc12_選[5]
+Acc12_通=Acc12[grepl("通",Acc12$選修別),]
+Acc12_通_加權=Acc12_通[4]*Acc12_通[5]
+
+cat("您總共修了",nrow(Acc12),"門課，\n 共",
+    sum(Acc12$學分數),"學分，\n 總平均為",
+    sum(Acc12_加權)/sum(Acc12$學分數),"分;\n\n其中，修了\n ",sum(Acc12_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc12_必$學分數),"學分，\n   平均為",
+    sum(Acc12_必_加權)/sum(Acc12_必$學分數),"分;\n ",sum(Acc12_選$選修別=="選"),"門選修;\n ",sum(Acc12_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc12_通$學分數),"學分，\n   平均為",
+    sum(Acc12_通_加權)/sum(Acc12_通$學分數),"分。")
+```
+
+##第二學年
+```{r}
+#全部
+Acc2_加權=Acc2[5]*Acc2[6]
+Acc2_必=Acc2[grepl("必",Acc2$選修別),]
+Acc2_必_加權=Acc2_必[5]*Acc2_必[6]
+Acc2_選=Acc2[grepl("選",Acc2$選修別),]
+Acc2_選_加權=Acc2_選[5]*Acc2_選[6]
+Acc2_通=Acc2[grepl("通",Acc2$選修別),]
+Acc2_通_加權=Acc2_通[5]*Acc2_通[6]
+
+cat("您總共修了",nrow(Acc2),"門課，\n 共",
+    sum(Acc2$學分數),"學分，\n 總平均為",
+    sum(Acc2_加權)/sum(Acc2$學分數),"分;\n\n其中，修了\n ",sum(Acc2_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc2_必$學分數),"學分，\n   平均為",
+    sum(Acc2_必_加權)/sum(Acc2_必$學分數),"分;\n ",sum(Acc2_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc2_選$學分數),"學分，\n   平均為",
+    sum(Acc2_選_加權)/sum(Acc2_選$學分數),"分;\n ",sum(Acc2_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc2_通$學分數),"學分，\n   平均為",
+    sum(Acc2_通_加權)/sum(Acc2_通$學分數),"分。")
+```
+###第一學期
+```{R}
+#全部
+Acc21_加權=Acc21[4]*Acc21[5]
+
+data_Acc21=t(transmute(Acc21,科目名稱,學期成績))
+colnames(data_Acc21) <- data_Acc21[1,]
+data_Acc21=data_Acc21[-1,]
+data_Acc21=t(data_Acc21)
+fAcc21=read_csv("fAcc21.csv")
+
+Acc_f21=ggradar(fAcc21,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Acc21_必=Acc21[grepl("必",Acc21$選修別),]
+Acc21_必_加權=Acc21_必[4]*Acc21_必[5]
+Acc21_選=Acc21[grepl("選",Acc21$選修別),]
+Acc21_選_加權=Acc21_選[4]*Acc21_選[5]
+Acc21_通=Acc21[grepl("通",Acc21$選修別),]
+Acc21_通_加權=Acc21_通[4]*Acc21_通[5]
+
+cat("您總共修了",nrow(Acc21),"門課，\n 共",
+    sum(Acc21$學分數),"學分，\n 總平均為",
+    sum(Acc21_加權)/sum(Acc21$學分數),"分;\n\n其中，修了\n ",sum(Acc21_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc21_必$學分數),"學分，\n   平均為",
+    sum(Acc21_必_加權)/sum(Acc21_必$學分數),"分;\n ",sum(Acc21_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc21_選$學分數),"學分，\n   平均為",
+    sum(Acc21_選_加權)/sum(Acc21_選$學分數),"分;\n ",sum(Acc21_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc21_通$學分數),"學分，\n   平均為",
+    sum(Acc21_通_加權)/sum(Acc21_通$學分數),"分。")
+```
+
+###第二學期
+```{R}
+#全部
+Acc22_加權=Acc22[4]*Acc22[5]
+
+data_Acc22=t(transmute(Acc22,科目名稱,學期成績))
+colnames(data_Acc22) <- data_Acc22[1,]
+data_Acc22=data_Acc22[-1,]
+data_Acc22=t(data_Acc22)
+fAcc22=read_csv("fAcc22.csv")
+
+Acc_f22=ggradar(fAcc22,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Acc22_必=Acc22[grepl("必",Acc22$選修別),]
+Acc22_必_加權=Acc22_必[4]*Acc22_必[5]
+Acc22_選=Acc22[grepl("選",Acc22$選修別),]
+Acc22_選_加權=Acc22_選[4]*Acc22_選[5]
+Acc22_通=Acc22[grepl("通",Acc22$選修別),]
+Acc22_通_加權=Acc22_通[4]*Acc22_通[5]
+
+cat("您總共修了",nrow(Acc22),"門課，\n 共",
+    sum(Acc22$學分數),"學分，\n 總平均為",
+    sum(Acc22_加權)/sum(Acc22$學分數),"分;\n\n其中，修了\n ",sum(Acc22_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc22_必$學分數),"學分，\n   平均為",
+    sum(Acc22_必_加權)/sum(Acc22_必$學分數),"分;\n ",sum(Acc22_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc22_選$學分數),"學分，\n   平均為",
+    sum(Acc22_選_加權)/sum(Acc22_選$學分數),"分;\n ",sum(Acc22_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc22_通$學分數),"學分，\n   平均為",
+    sum(Acc22_通_加權)/sum(Acc22_通$學分數),"分。")
+```
+
+##第三學年
+```{r}
+#全部
+Acc3_加權=Acc3[5]*Acc3[6]
+Acc3_必=Acc3[grepl("必",Acc3$選修別),]
+Acc3_必_加權=Acc3_必[5]*Acc3_必[6]
+Acc3_選=Acc3[grepl("選",Acc3$選修別),]
+Acc3_選_加權=Acc3_選[5]*Acc3_選[6]
+Acc3_通=Acc3[grepl("通",Acc3$選修別),]
+Acc3_通_加權=Acc3_通[5]*Acc3_通[6]
+
+cat("您總共修了",nrow(Acc3),"門課，\n 共",
+    sum(Acc3$學分數),"學分，\n 總平均為",
+    sum(Acc3_加權)/sum(Acc3$學分數),"分;\n\n其中，修了\n ",sum(Acc3_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc3_必$學分數),"學分，\n   平均為",
+    sum(Acc3_必_加權)/sum(Acc3_必$學分數),"分;\n ",sum(Acc3_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc3_選$學分數),"學分，\n   平均為",
+    sum(Acc3_選_加權)/sum(Acc3_選$學分數),"分;\n ",sum(Acc3_通$選修別=="通"),"門通識。")
+```
+
+###第一學期
+```{R}
+#全部
+Acc31_加權=Acc31[4]*Acc31[5]
+
+data_Acc31=t(transmute(Acc31,科目名稱,學期成績))
+colnames(data_Acc31) <- data_Acc31[1,]
+data_Acc31=data_Acc31[-1,]
+data_Acc31=t(data_Acc31)
+fAcc31=read_csv("fAcc31.csv")
+
+Acc_f31=ggradar(fAcc31,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Acc31_必=Acc31[grepl("必",Acc31$選修別),]
+Acc31_必_加權=Acc31_必[4]*Acc31_必[5]
+Acc31_選=Acc31[grepl("選",Acc31$選修別),]
+Acc31_選_加權=Acc31_選[4]*Acc31_選[5]
+Acc31_通=Acc31[grepl("通",Acc31$選修別),]
+Acc31_通_加權=Acc31_通[4]*Acc31_通[5]
+
+cat("您總共修了",nrow(Acc31),"門課，\n 共",
+    sum(Acc31$學分數),"學分，\n 總平均為",
+    sum(Acc31_加權)/sum(Acc31$學分數),"分;\n\n其中，修了\n ",sum(Acc31_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc31_必$學分數),"學分，\n   平均為",
+    sum(Acc31_必_加權)/sum(Acc31_必$學分數),"分;\n ",sum(Acc31_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc31_選$學分數),"學分，\n   平均為",
+    sum(Acc31_選_加權)/sum(Acc31_選$學分數),"分;\n ",sum(Acc31_通$選修別=="通"),"門通識。")
+```
+
+###第二學期
+```{R}
+#全部
+Acc32_加權=Acc32[4]*Acc32[5]
+
+data_Acc32=t(transmute(Acc32,科目名稱,學期成績))
+colnames(data_Acc32) <- data_Acc32[1,]
+data_Acc32=data_Acc32[-1,]
+data_Acc32=t(data_Acc32)
+fAcc32=read_csv("fAcc32.csv")
+
+Acc_f32=ggradar(fAcc32,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Acc32_必=Acc32[grepl("必",Acc32$選修別),]
+Acc32_必_加權=Acc32_必[4]*Acc32_必[5]
+Acc32_選=Acc32[grepl("選",Acc32$選修別),]
+Acc32_選_加權=Acc32_選[4]*Acc32_選[5]
+Acc32_通=Acc32[grepl("通",Acc32$選修別),]
+Acc32_通_加權=Acc32_通[4]*Acc32_通[5]
+
+cat("您總共修了",nrow(Acc32),"門課，\n 共",
+    sum(Acc32$學分數),"學分，\n 總平均為",
+    sum(Acc32_加權)/sum(Acc32$學分數),"分;\n\n其中，修了\n ",sum(Acc32_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc32_必$學分數),"學分，\n   平均為",
+    sum(Acc32_必_加權)/sum(Acc32_必$學分數),"分;\n ",sum(Acc32_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc32_選$學分數),"學分，\n   平均為",
+    sum(Acc32_選_加權)/sum(Acc32_選$學分數),"分;\n ",sum(Acc32_通$選修別=="通"),"門通識。")
+```
+
+##第四學年
+```{r}
+#全部
+Acc4_加權=Acc4[5]*Acc4[6]
+Acc4_必=Acc4[grepl("必",Acc4$選修別),]
+Acc4_必_加權=Acc4_必[5]*Acc4_必[6]
+Acc4_選=Acc4[grepl("選",Acc4$選修別),]
+Acc4_選_加權=Acc4_選[5]*Acc4_選[6]
+Acc4_通=Acc4[grepl("通",Acc4$選修別),]
+Acc4_通_加權=Acc4_通[5]*Acc4_通[6]
+
+cat("您總共修了",nrow(Acc4),"門課，\n 共",
+    sum(Acc4$學分數),"學分，\n 總平均為",
+    sum(Acc4_加權)/sum(Acc4$學分數),"分;\n\n其中，修了\n ",sum(Acc4_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc4_必$學分數),"學分，\n   平均為",
+    sum(Acc4_必_加權)/sum(Acc4_必$學分數),"分;\n ",sum(Acc4_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc4_選$學分數),"學分，\n   平均為",
+    sum(Acc4_選_加權)/sum(Acc4_選$學分數),"分;\n ",sum(Acc4_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc4_通$學分數),"學分，\n   平均為",
+    sum(Acc4_通_加權)/sum(Acc4_通$學分數),"分")
+```
+
+###第一學期
+```{R}
+#全部
+Acc41_加權=Acc41[4]*Acc41[5]
+
+data_Acc41=t(transmute(Acc41,科目名稱,學期成績))
+colnames(data_Acc41) <- data_Acc41[1,]
+data_Acc41=data_Acc41[-1,]
+data_Acc41=t(data_Acc41)
+fAcc41=read_csv("fAcc41.csv")
+
+Acc_f41=ggradar(fAcc41,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Acc41_必=Acc41[grepl("必",Acc41$選修別),]
+Acc41_必_加權=Acc41_必[4]*Acc41_必[5]
+Acc41_選=Acc41[grepl("選",Acc41$選修別),]
+Acc41_選_加權=Acc41_選[4]*Acc41_選[5]
+Acc41_通=Acc41[grepl("通",Acc41$選修別),]
+Acc41_通_加權=Acc41_通[4]*Acc41_通[5]
+
+cat("您總共修了",nrow(Acc41),"門課，\n 共",
+    sum(Acc41$學分數),"學分，\n 總平均為",
+    sum(Acc41_加權)/sum(Acc41$學分數),"分;\n\n其中，修了\n ",sum(Acc41_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc41_必$學分數),"學分，\n   平均為",
+    sum(Acc41_必_加權)/sum(Acc41_必$學分數),"分;\n ",sum(Acc41_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc41_選$學分數),"學分，\n   平均為",
+    sum(Acc41_選_加權)/sum(Acc41_選$學分數),"分;\n ",sum(Acc41_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc41_通$學分數),"學分，\n   平均為",
+    sum(Acc41_通_加權)/sum(Acc41_通$學分數),"分。")
+```
+
+###第二學期
+```{R}
+#全部
+Acc42_加權=Acc42[4]*Acc42[5]
+
+data_Acc42=t(transmute(Acc42,科目名稱,學期成績))
+colnames(data_Acc42) <- data_Acc42[1,]
+data_Acc42=data_Acc42[-1,]
+data_Acc42=t(data_Acc42)
+fAcc42=read_csv("fAcc42.csv")
+
+Acc_f42=ggradar(fAcc42,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Acc42_必=Acc42[grepl("必",Acc42$選修別),]
+Acc42_必_加權=Acc42_必[4]*Acc42_必[5]
+Acc42_選=Acc42[grepl("選",Acc42$選修別),]
+Acc42_選_加權=Acc42_選[4]*Acc42_選[5]
+Acc42_通=Acc42[grepl("通",Acc42$選修別),]
+Acc42_通_加權=Acc42_通[4]*Acc42_通[5]
+
+cat("您總共修了",nrow(Acc42),"門課，\n 共",
+    sum(Acc42$學分數),"學分，\n 總平均為",
+    sum(Acc42_加權)/sum(Acc42$學分數),"分;\n\n其中，修了\n ",sum(Acc42_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc42_必$學分數),"學分，\n   平均為",
+    sum(Acc42_必_加權)/sum(Acc42_必$學分數),"分;\n ",sum(Acc42_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc42_選$學分數),"學分，\n   平均為",
+    sum(Acc42_選_加權)/sum(Acc42_選$學分數),"分;\n ",sum(Acc42_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc42_通$學分數),"學分，\n   平均為",
+    sum(Acc42_通_加權)/sum(Acc42_通$學分數),"分。")
+```
+				
+#Econ
+##全部
+```{r}
+Econ_all_加權=Econ_all[6]*Econ_all[7]
+Econ_all_必=Econ_all[grepl("必",Econ_all$選修別),]
+Econ_all_必_加權=Econ_all_必[6]*Econ_all_必[7]
+Econ_all_選=Econ_all[grepl("選",Econ_all$選修別),]
+Econ_all_選_加權=Econ_all_選[6]*Econ_all_選[7]
+Econ_all_通=Econ_all[grepl("通",Econ_all$選修別),]
+Econ_all_通_加權=Econ_all_通[6]*Econ_all_通[7]
+
+cat("您總共修了",nrow(Econ_all),"門課，\n 共",
+    sum(Econ_all$學分數),"學分，\n 總平均為",
+    sum(Econ_all_加權)/sum(Econ_all$學分數),"分;\n\n其中，修了\n ",sum(Econ_all_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ_all_必$學分數),"學分，\n   平均為",
+    sum(Econ_all_必_加權)/sum(Econ_all_必$學分數),"分;\n ",sum(Econ_all_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ_all_選$學分數),"學分，\n   平均為",
+    sum(Econ_all_選_加權)/sum(Econ_all_選$學分數),"分;\n ",sum(Econ_all_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ_all_通$學分數),"學分，\n   平均為",
+    sum(Econ_all_通_加權)/sum(Econ_all_通$學分數),"分。")
+
+```
+
+
+##第一學年
+```{r}
+#全部
+Econ1_加權=Econ1[5]*Econ1[6]
+Econ1_必=Econ1[grepl("必",Econ1$選修別),]
+Econ1_必_加權=Econ1_必[5]*Econ1_必[6]
+Econ1_選=Econ1[grepl("選",Econ1$選修別),]
+Econ1_選_加權=Econ1_選[5]*Econ1_選[6]
+Econ1_通=Econ1[grepl("通",Econ1$選修別),]
+Econ1_通_加權=Econ1_通[5]*Econ1_通[6]
+cat("您總共修了",nrow(Econ1),"門課，\n 共",
+    sum(Econ1$學分數),"學分，\n 總平均為",
+    sum(Econ1_加權)/sum(Econ1$學分數),"分;\n\n其中，修了\n ",sum(Econ1_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ1_必$學分數),"學分，\n   平均為",
+    sum(Econ1_必_加權)/sum(Econ1_必$學分數),"分;\n ",sum(Econ1_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ1_選$學分數),"學分，\n   平均為",
+    sum(Econ1_選_加權)/sum(Econ1_選$學分數),"分;\n ",sum(Econ1_通$選修別=="通"),"門通識。")
+```
+
+###第一學期
+```{R}
+#全部
+Econ11_加權=Econ11[4]*Econ11[5]
+
+data_Econ11=t(transmute(Econ11,科目名稱,學期成績))
+colnames(data_Econ11) <- data_Econ11[1,]
+data_Econ11=data_Econ11[-1,]
+data_Econ11=t(data_Econ11)
+fEcon11=read_csv("fEcon11.csv")
+
+Econ_f11=ggradar(fEcon11,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Econ11_必=Econ11[grepl("必",Econ11$選修別),]
+Econ11_必_加權=Econ11_必[4]*Econ11_必[5]
+Econ11_選=Econ11[grepl("選",Econ11$選修別),]
+Econ11_選_加權=Econ11_選[4]*Econ11_選[5]
+Econ11_通=Econ11[grepl("通",Econ11$選修別),]
+Econ11_通_加權=Econ11_通[4]*Econ11_通[5]
+
+cat("您總共修了",nrow(Econ11),"門課，\n 共",
+    sum(Econ11$學分數),"學分，\n 總平均為",
+    sum(Econ11_加權)/sum(Econ11$學分數),"分;\n\n其中，修了\n ",sum(Econ11_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ11_必$學分數),"學分，\n   平均為",
+    sum(Econ11_必_加權)/sum(Econ11_必$學分數),"分;\n ",sum(Econ11_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ11_選$學分數),"學分，\n   平均為",
+    sum(Econ11_選_加權)/sum(Econ11_選$學分數),"分;\n ",sum(Econ11_通$選修別=="通"),"門通識。")
+```
+
+###第二學期
+```{R}
+#全部
+Econ12_加權=Econ12[4]*Econ12[5]
+
+data_Econ12=t(transmute(Econ12,科目名稱,學期成績))
+colnames(data_Econ12) <- data_Econ12[1,]
+data_Econ12=data_Econ12[-1,]
+data_Econ12=t(data_Econ12)
+fEcon12=read_csv("fEcon12.csv")
+
+Econ_f12=ggradar(fEcon12,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+Econ12_必=Econ12[grepl("必",Econ12$選修別),]
+Econ12_必_加權=Econ12_必[4]*Econ12_必[5]
+Econ12_選=Econ12[grepl("選",Econ12$選修別),]
+Econ12_選_加權=Econ12_選[4]*Econ12_選[5]
+Econ12_通=Econ12[grepl("通",Econ12$選修別),]
+Econ12_通_加權=Econ12_通[4]*Econ12_通[5]
+
+cat("您總共修了",nrow(Econ12),"門課，\n 共",
+    sum(Econ12$學分數),"學分，\n 總平均為",
+    sum(Econ12_加權)/sum(Econ12$學分數),"分;\n\n其中，修了\n ",sum(Econ12_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ12_必$學分數),"學分，\n   平均為",
+    sum(Econ12_必_加權)/sum(Econ12_必$學分數),"分;\n ",sum(Econ12_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ12_選$學分數),"學分，\n   平均為",
+    sum(Econ12_選_加權)/sum(Econ12_選$學分數),"分;\n ",sum(Econ12_通$選修別=="通"),"門通識。")
+```
+
+##第二學年
+```{r}
+#全部
+Econ2_加權=Econ2[5]*Econ2[6]
+Econ2_必=Econ2[grepl("必",Econ2$選修別),]
+Econ2_必_加權=Econ2_必[5]*Econ2_必[6]
+Econ2_選=Econ2[grepl("選",Econ2$選修別),]
+Econ2_選_加權=Econ2_選[5]*Econ2_選[6]
+Econ2_通=Econ2[grepl("通",Econ2$選修別),]
+Econ2_通_加權=Econ2_通[5]*Econ2_通[6]
+
+cat("您總共修了",nrow(Econ2),"門課，\n 共",
+    sum(Econ2$學分數),"學分，\n 總平均為",
+    sum(Econ2_加權)/sum(Econ2$學分數),"分;\n\n其中，修了\n ",sum(Econ2_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ2_必$學分數),"學分，\n   平均為",
+    sum(Econ2_必_加權)/sum(Econ2_必$學分數),"分;\n ",sum(Econ2_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ2_選$學分數),"學分，\n   平均為",
+    sum(Econ2_選_加權)/sum(Econ2_選$學分數),"分;\n ",sum(Econ2_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ2_通$學分數),"學分，\n   平均為",
+    sum(Econ2_通_加權)/sum(Econ2_通$學分數),"分。")
+```
+###第一學期
+```{R}
+#全部
+Econ21_加權=Econ21[4]*Econ21[5]
+
+data_Econ21=t(transmute(Econ21,科目名稱,學期成績))
+colnames(data_Econ21) <- data_Econ21[1,]
+data_Econ21=data_Econ21[-1,]
+data_Econ21=t(data_Econ21)
+fEcon21=read_csv("fEcon21.csv")
+
+Econ_f21=ggradar(fEcon21,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Econ21_必=Econ21[grepl("必",Econ21$選修別),]
+Econ21_必_加權=Econ21_必[4]*Econ21_必[5]
+Econ21_選=Econ21[grepl("選",Econ21$選修別),]
+Econ21_選_加權=Econ21_選[4]*Econ21_選[5]
+Econ21_通=Econ21[grepl("通",Econ21$選修別),]
+Econ21_通_加權=Econ21_通[4]*Econ21_通[5]
+
+cat("您總共修了",nrow(Econ21),"門課，\n 共",
+    sum(Econ21$學分數),"學分，\n 總平均為",
+    sum(Econ21_加權)/sum(Econ21$學分數),"分;\n\n其中，修了\n ",sum(Econ21_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ21_必$學分數),"學分，\n   平均為",
+    sum(Econ21_必_加權)/sum(Econ21_必$學分數),"分;\n ",sum(Econ21_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ21_選$學分數),"學分，\n   平均為",
+    sum(Econ21_選_加權)/sum(Econ21_選$學分數),"分;\n ",sum(Econ21_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ21_通$學分數),"學分，\n   平均為",
+    sum(Econ21_通_加權)/sum(Econ21_通$學分數),"分。")
+```
+
+###第二學期
+```{R}
+#全部
+Econ22_加權=Econ22[4]*Econ22[5]
+
+data_Econ22=t(transmute(Econ22,科目名稱,學期成績))
+colnames(data_Econ22) <- data_Econ22[1,]
+data_Econ22=data_Econ22[-1,]
+data_Econ22=t(data_Econ22)
+fEcon22=read_csv("fEcon22.csv")
+
+Econ_f22=ggradar(fEcon22,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Econ22_必=Econ22[grepl("必",Econ22$選修別),]
+Econ22_必_加權=Econ22_必[4]*Econ22_必[5]
+Econ22_選=Econ22[grepl("選",Econ22$選修別),]
+Econ22_選_加權=Econ22_選[4]*Econ22_選[5]
+Econ22_通=Econ22[grepl("通",Econ22$選修別),]
+Econ22_通_加權=Econ22_通[4]*Econ22_通[5]
+
+cat("您總共修了",nrow(Econ22),"門課，\n 共",
+    sum(Econ22$學分數),"學分，\n 總平均為",
+    sum(Econ22_加權)/sum(Econ22$學分數),"分;\n\n其中，修了\n ",sum(Econ22_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ22_必$學分數),"學分，\n   平均為",
+    sum(Econ22_必_加權)/sum(Econ22_必$學分數),"分;\n ",sum(Econ22_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ22_選$學分數),"學分，\n   平均為",
+    sum(Econ22_選_加權)/sum(Econ22_選$學分數),"分;\n ",sum(Econ22_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ22_通$學分數),"學分，\n   平均為",
+    sum(Econ22_通_加權)/sum(Econ22_通$學分數),"分。")
+```
+
+##第三學年
+```{r}
+#全部
+Econ3_加權=Econ3[5]*Econ3[6]
+Econ3_必=Econ3[grepl("必",Econ3$選修別),]
+Econ3_必_加權=Econ3_必[5]*Econ3_必[6]
+Econ3_選=Econ3[grepl("選",Econ3$選修別),]
+Econ3_選_加權=Econ3_選[5]*Econ3_選[6]
+Econ3_通=Econ3[grepl("通",Econ3$選修別),]
+Econ3_通_加權=Econ3_通[5]*Econ3_通[6]
+
+cat("您總共修了",nrow(Econ3),"門課，\n 共",
+    sum(Econ3$學分數),"學分，\n 總平均為",
+    sum(Econ3_加權)/sum(Econ3$學分數),"分;\n\n其中，修了\n ",sum(Econ3_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ3_必$學分數),"學分，\n   平均為",
+    sum(Econ3_必_加權)/sum(Econ3_必$學分數),"分;\n ",sum(Econ3_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ3_選$學分數),"學分，\n   平均為",
+    sum(Econ3_選_加權)/sum(Econ3_選$學分數),"分;\n ",sum(Econ3_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ3_通$學分數),"學分，\n   平均為",
+    sum(Econ3_通_加權)/sum(Econ3_通$學分數),"分。")
+```
+
+###第一學期
+```{R}
+#全部
+Econ31_加權=Econ31[4]*Econ31[5]
+
+data_Econ31=t(transmute(Econ31,科目名稱,學期成績))
+colnames(data_Econ31) <- data_Econ31[1,]
+data_Econ31=data_Econ31[-1,]
+data_Econ31=t(data_Econ31)
+fEcon31=read_csv("fEcon31.csv")
+
+Econ_f31=ggradar(fEcon31,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Econ31_必=Econ31[grepl("必",Econ31$選修別),]
+Econ31_必_加權=Econ31_必[4]*Econ31_必[5]
+Econ31_選=Econ31[grepl("選",Econ31$選修別),]
+Econ31_選_加權=Econ31_選[4]*Econ31_選[5]
+Econ31_通=Econ31[grepl("通",Econ31$選修別),]
+Econ31_通_加權=Econ31_通[4]*Econ31_通[5]
+
+cat("您總共修了",nrow(Econ31),"門課，\n 共",
+    sum(Econ31$學分數),"學分，\n 總平均為",
+    sum(Econ31_加權)/sum(Econ31$學分數),"分;\n\n其中，修了\n ",sum(Econ31_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ31_必$學分數),"學分，\n   平均為",
+    sum(Econ31_必_加權)/sum(Econ31_必$學分數),"分;\n ",sum(Econ31_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ31_選$學分數),"學分，\n   平均為",
+    sum(Econ31_選_加權)/sum(Econ31_選$學分數),"分;\n ",sum(Econ31_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ31_通$學分數),"學分，\n   平均為",
+    sum(Econ31_通_加權)/sum(Econ31_通$學分數),"分。")
+```
+
+###第二學期
+```{R}
+#全部
+Econ32_加權=Econ32[4]*Econ32[5]
+
+data_Econ32=t(transmute(Econ32,科目名稱,學期成績))
+colnames(data_Econ32) <- data_Econ32[1,]
+data_Econ32=data_Econ32[-1,]
+data_Econ32=t(data_Econ32)
+fEcon32=read_csv("fEcon32.csv")
+
+Econ_f32=ggradar(fEcon32,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Econ32_必=Econ32[grepl("必",Econ32$選修別),]
+Econ32_必_加權=Econ32_必[4]*Econ32_必[5]
+Econ32_選=Econ32[grepl("選",Econ32$選修別),]
+Econ32_選_加權=Econ32_選[4]*Econ32_選[5]
+Econ32_通=Econ32[grepl("通",Econ32$選修別),]
+Econ32_通_加權=Econ32_通[4]*Econ32_通[5]
+
+cat("您總共修了",nrow(Econ32),"門課，\n 共",
+    sum(Econ32$學分數),"學分，\n 總平均為",
+    sum(Econ32_加權)/sum(Econ32$學分數),"分;\n\n其中，修了\n ",sum(Econ32_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ32_必$學分數),"學分，\n   平均為",
+    sum(Econ32_必_加權)/sum(Econ32_必$學分數),"分;\n ",sum(Econ32_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ32_選$學分數),"學分，\n   平均為",
+    sum(Econ32_選_加權)/sum(Econ32_選$學分數),"分;\n ",sum(Econ32_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ32_通$學分數),"學分，\n   平均為",
+    sum(Econ32_通_加權)/sum(Econ32_通$學分數),"分。")
+```
+
+##第四學年
+```{r}
+#全部
+Econ4_加權=Econ4[5]*Econ4[6]
+Econ4_必=Econ4[grepl("必",Econ4$選修別),]
+Econ4_必_加權=Econ4_必[5]*Econ4_必[6]
+Econ4_選=Econ4[grepl("選",Econ4$選修別),]
+Econ4_選_加權=Econ4_選[5]*Econ4_選[6]
+Econ4_通=Econ4[grepl("通",Econ4$選修別),]
+Econ4_通_加權=Econ4_通[5]*Econ4_通[6]
+
+cat("您總共修了",nrow(Econ4),"門課，\n 共",
+    sum(Econ4$學分數),"學分，\n 總平均為",
+    sum(Econ4_加權)/sum(Econ4$學分數),"分;\n\n其中，修了\n ",sum(Econ4_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ4_必$學分數),"學分，\n   平均為",
+    sum(Econ4_必_加權)/sum(Econ4_必$學分數),"分;\n ",sum(Econ4_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ4_選$學分數),"學分，\n   平均為",
+    sum(Econ4_選_加權)/sum(Econ4_選$學分數),"分;\n ",sum(Econ4_通$選修別=="通"),"門通識。")
+```
+
+###第一學期
+```{R}
+#全部
+Econ41_加權=Econ41[4]*Econ41[5]
+
+data_Econ41=t(transmute(Econ41,科目名稱,學期成績))
+colnames(data_Econ41) <- data_Econ41[1,]
+data_Econ41=data_Econ41[-1,]
+data_Econ41=t(data_Econ41)
+fEcon41=read_csv("fEcon41.csv")
+
+Econ_f41=ggradar(fEcon41,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Econ41_必=Econ41[grepl("必",Econ41$選修別),]
+Econ41_必_加權=Econ41_必[4]*Econ41_必[5]
+Econ41_選=Econ41[grepl("選",Econ41$選修別),]
+Econ41_選_加權=Econ41_選[4]*Econ41_選[5]
+Econ41_通=Econ41[grepl("通",Econ41$選修別),]
+Econ41_通_加權=Econ41_通[4]*Econ41_通[5]
+
+cat("您總共修了",nrow(Econ41),"門課，\n 共",
+    sum(Econ41$學分數),"學分，\n 總平均為",
+    sum(Econ41_加權)/sum(Econ41$學分數),"分;\n\n其中，修了\n ",sum(Econ41_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ41_必$學分數),"學分，\n   平均為",
+    sum(Econ41_必_加權)/sum(Econ41_必$學分數),"分;\n ",sum(Econ41_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ41_選$學分數),"學分，\n   平均為",
+    sum(Econ41_選_加權)/sum(Econ41_選$學分數),"分;\n ",sum(Econ41_通$選修別=="通"),"門通識。")
+```
+
+###第二學期
+```{R}
+#全部
+Econ42_加權=Econ42[4]*Econ42[5]
+
+data_Econ42=t(transmute(Econ42,科目名稱,學期成績))
+colnames(data_Econ42) <- data_Econ42[1,]
+data_Econ42=data_Econ42[-1,]
+data_Econ42=t(data_Econ42)
+fEcon42=read_csv("fEcon42.csv")
+
+Econ_f42=ggradar(fEcon42,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Econ42_必=Econ42[grepl("必",Econ42$選修別),]
+Econ42_必_加權=Econ42_必[4]*Econ42_必[5]
+Econ42_選=Econ42[grepl("選",Econ42$選修別),]
+Econ42_選_加權=Econ42_選[4]*Econ42_選[5]
+Econ42_通=Econ42[grepl("通",Econ42$選修別),]
+Econ42_通_加權=Econ42_通[4]*Econ42_通[5]
+
+cat("您總共修了",nrow(Econ42),"門課，\n 共",
+    sum(Econ42$學分數),"學分，\n 總平均為",
+    sum(Econ42_加權)/sum(Econ42$學分數),"分;\n\n其中，修了\n ",sum(Econ42_必$選修別=="必"),"門必修;\n ",sum(Econ42_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ42_選$學分數),"學分，\n   平均為",
+    sum(Econ42_選_加權)/sum(Econ42_選$學分數),"分;\n ",sum(Econ42_通$選修別=="通"),"門通識。")
+```
+
+#Stat
+##全部
+```{r}
+Stat_all_加權=Stat_all[6]*Stat_all[7]
+Stat_all_必=Stat_all[grepl("必",Stat_all$選修別),]
+Stat_all_必_加權=Stat_all_必[6]*Stat_all_必[7]
+Stat_all_選=Stat_all[grepl("選",Stat_all$選修別),]
+Stat_all_選_加權=Stat_all_選[6]*Stat_all_選[7]
+Stat_all_通=Stat_all[grepl("通",Stat_all$選修別),]
+Stat_all_通_加權=Stat_all_通[6]*Stat_all_通[7]
+
+cat("您總共修了",nrow(Stat_all),"門課，\n 共",
+    sum(Stat_all$學分數),"學分，\n 總平均為",
+    sum(Stat_all_加權)/sum(Stat_all$學分數),"分;\n\n其中，修了\n ",sum(Stat_all_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat_all_必$學分數),"學分，\n   平均為",
+    sum(Stat_all_必_加權)/sum(Stat_all_必$學分數),"分;\n ",sum(Stat_all_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat_all_選$學分數),"學分，\n   平均為",
+    sum(Stat_all_選_加權)/sum(Stat_all_選$學分數),"分;\n ",sum(Stat_all_通$選修別=="通"),"門通識，\n   共",
+    sum(Stat_all_通$學分數),"學分，\n   平均為",
+    sum(Stat_all_通_加權)/sum(Stat_all_通$學分數),"分。")
+
+```
+
+
+##第一學年
+```{r}
+#全部
+Stat1_加權=Stat1[5]*Stat1[6]
+Stat1_必=Stat1[grepl("必",Stat1$選修別),]
+Stat1_必_加權=Stat1_必[5]*Stat1_必[6]
+Stat1_選=Stat1[grepl("選",Stat1$選修別),]
+Stat1_選_加權=Stat1_選[5]*Stat1_選[6]
+Stat1_通=Stat1[grepl("通",Stat1$選修別),]
+Stat1_通_加權=Stat1_通[5]*Stat1_通[6]
+
+cat("您總共修了",nrow(Stat1),"門課，\n 共",
+    sum(Stat1$學分數),"學分，\n 總平均為",
+    sum(Stat1_加權)/sum(Stat1$學分數),"分;\n\n其中，修了\n ",sum(Stat1_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat1_必$學分數),"學分，\n   平均為",
+    sum(Stat1_必_加權)/sum(Stat1_必$學分數),"分;\n ",sum(Stat1_選$選修別=="選"),"門選修;\n ",sum(Stat1_通$選修別=="通"),"門通識。")
+```
+
+###第一學期
+```{R}
+#全部
+Stat11_加權=Stat11[4]*Stat11[5]
+
+data_Stat11=t(transmute(Stat11,科目名稱,學期成績))
+colnames(data_Stat11) <- data_Stat11[1,]
+data_Stat11=data_Stat11[-1,]
+data_Stat11=t(data_Stat11)
+fStat11=read_csv("fStat11.csv")
+
+Stat_f11=ggradar(fStat11,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Stat11_必=Stat11[grepl("必",Stat11$選修別),]
+Stat11_必_加權=Stat11_必[4]*Stat11_必[5]
+Stat11_選=Stat11[grepl("選",Stat11$選修別),]
+Stat11_選_加權=Stat11_選[4]*Stat11_選[5]
+Stat11_通=Stat11[grepl("通",Stat11$選修別),]
+Stat11_通_加權=Stat11_通[4]*Stat11_通[5]
+
+cat("您總共修了",nrow(Stat11),"門課，\n 共",
+    sum(Stat11$學分數),"學分，\n 總平均為",
+    sum(Stat11_加權)/sum(Stat11$學分數),"分;\n\n其中，修了\n ",sum(Stat11_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat11_必$學分數),"學分，\n   平均為",
+    sum(Stat11_必_加權)/sum(Stat11_必$學分數),"分;\n ",sum(Stat11_選$選修別=="選"),"門選修;\n ",sum(Stat11_通$選修別=="通"),"門通識。")
+```
+
+###第二學期
+```{R}
+#全部
+Stat12_加權=Stat12[4]*Stat12[5]
+
+data_Stat12=t(transmute(Stat12,科目名稱,學期成績))
+colnames(data_Stat12) <- data_Stat12[1,]
+data_Stat12=data_Stat12[-1,]
+data_Stat12=t(data_Stat12)
+fStat12=read_csv("fStat12.csv")
+
+Stat_f12=ggradar(fStat12,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+Stat12_必=Stat12[grepl("必",Stat12$選修別),]
+Stat12_必_加權=Stat12_必[4]*Stat12_必[5]
+Stat12_選=Stat12[grepl("選",Stat12$選修別),]
+Stat12_選_加權=Stat12_選[4]*Stat12_選[5]
+Stat12_通=Stat12[grepl("通",Stat12$選修別),]
+Stat12_通_加權=Stat12_通[4]*Stat12_通[5]
+
+cat("您總共修了",nrow(Stat12),"門課，\n 共",
+    sum(Stat12$學分數),"學分，\n 總平均為",
+    sum(Stat12_加權)/sum(Stat12$學分數),"分;\n\n其中，修了\n ",sum(Stat12_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat12_必$學分數),"學分，\n   平均為",
+    sum(Stat12_必_加權)/sum(Stat12_必$學分數),"分;\n ",sum(Stat12_選$選修別=="選"),"門選修;\n ",sum(Stat12_通$選修別=="通"),"門通識。")
+```
+
+##第二學年
+```{r}
+#全部
+Stat2_加權=Stat2[5]*Stat2[6]
+Stat2_必=Stat2[grepl("必",Stat2$選修別),]
+Stat2_必_加權=Stat2_必[5]*Stat2_必[6]
+Stat2_選=Stat2[grepl("選",Stat2$選修別),]
+Stat2_選_加權=Stat2_選[5]*Stat2_選[6]
+Stat2_通=Stat2[grepl("通",Stat2$選修別),]
+Stat2_通_加權=Stat2_通[5]*Stat2_通[6]
+
+cat("您總共修了",nrow(Stat2),"門課，\n 共",
+    sum(Stat2$學分數),"學分，\n 總平均為",
+    sum(Stat2_加權)/sum(Stat2$學分數),"分;\n\n其中，修了\n ",sum(Stat2_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat2_必$學分數),"學分，\n   平均為",
+    sum(Stat2_必_加權)/sum(Stat2_必$學分數),"分;\n ",sum(Stat2_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat2_選$學分數),"學分，\n   平均為",
+    sum(Stat2_選_加權)/sum(Stat2_選$學分數),"分;\n ",sum(Stat2_通$選修別=="通"),"門通識，\n   共",
+    sum(Stat2_通$學分數),"學分，\n   平均為",
+    sum(Stat2_通_加權)/sum(Stat2_通$學分數),"分。")
+```
+
+###第一學期
+```{R}
+#全部
+Stat21_加權=Stat21[4]*Stat21[5]
+
+data_Stat21=t(transmute(Stat21,科目名稱,學期成績))
+colnames(data_Stat21) <- data_Stat21[1,]
+data_Stat21=data_Stat21[-1,]
+data_Stat21=t(data_Stat21)
+fStat21=read_csv("fStat21.csv")
+
+Stat_f21=ggradar(fStat21,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Stat21_必=Stat21[grepl("必",Stat21$選修別),]
+Stat21_必_加權=Stat21_必[4]*Stat21_必[5]
+Stat21_選=Stat21[grepl("選",Stat21$選修別),]
+Stat21_選_加權=Stat21_選[4]*Stat21_選[5]
+Stat21_通=Stat21[grepl("通",Stat21$選修別),]
+Stat21_通_加權=Stat21_通[4]*Stat21_通[5]
+
+cat("您總共修了",nrow(Stat21),"門課，\n 共",
+    sum(Stat21$學分數),"學分，\n 總平均為",
+    sum(Stat21_加權)/sum(Stat21$學分數),"分;\n\n其中，修了\n ",sum(Stat21_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat21_必$學分數),"學分，\n   平均為",
+    sum(Stat21_必_加權)/sum(Stat21_必$學分數),"分;\n ",sum(Stat21_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat21_選$學分數),"學分，\n   平均為",
+    sum(Stat21_選_加權)/sum(Stat21_選$學分數),"分;\n ",sum(Stat21_通$選修別=="通"),"門通識。")
+```
+
+###第二學期
+```{R}
+#全部
+Stat22_加權=Stat22[4]*Stat22[5]
+
+data_Stat22=t(transmute(Stat22,科目名稱,學期成績))
+colnames(data_Stat22) <- data_Stat22[1,]
+data_Stat22=data_Stat22[-1,]
+data_Stat22=t(data_Stat22)
+fStat22=read_csv("fStat22.csv")
+
+Stat_f22=ggradar(fStat22,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+Stat22_必=Stat22[grepl("必",Stat22$選修別),]
+Stat22_必_加權=Stat22_必[4]*Stat22_必[5]
+Stat22_選=Stat22[grepl("選",Stat22$選修別),]
+Stat22_選_加權=Stat22_選[4]*Stat22_選[5]
+Stat22_通=Stat22[grepl("通",Stat22$選修別),]
+Stat22_通_加權=Stat22_通[4]*Stat22_通[5]
+
+cat("您總共修了",nrow(Stat22),"門課，\n 共",
+    sum(Stat22$學分數),"學分，\n 總平均為",
+    sum(Stat22_加權)/sum(Stat22$學分數),"分;\n\n其中，修了\n ",sum(Stat22_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat22_必$學分數),"學分，\n   平均為",
+    sum(Stat22_必_加權)/sum(Stat22_必$學分數),"分;\n ",sum(Stat22_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat22_選$學分數),"學分，\n   平均為",
+    sum(Stat22_選_加權)/sum(Stat22_選$學分數),"分;\n ",sum(Stat22_通$選修別=="通"),"門通識，\n   共",
+    sum(Stat22_通$學分數),"學分，\n   平均為",
+    sum(Stat22_通_加權)/sum(Stat22_通$學分數),"分。")
+```
+
+##第三學年
+```{r}
+#全部
+Stat3_加權=Stat3[5]*Stat3[6]
+Stat3_必=Stat3[grepl("必",Stat3$選修別),]
+Stat3_必_加權=Stat3_必[5]*Stat3_必[6]
+Stat3_選=Stat3[grepl("選",Stat3$選修別),]
+Stat3_選_加權=Stat3_選[5]*Stat3_選[6]
+Stat3_通=Stat3[grepl("通",Stat3$選修別),]
+Stat3_通_加權=Stat3_通[5]*Stat3_通[6]
+
+cat("您總共修了",nrow(Stat3),"門課，\n 共",
+    sum(Stat3$學分數),"學分，\n 總平均為",
+    sum(Stat3_加權)/sum(Stat3$學分數),"分;\n\n其中，修了\n ",sum(Stat3_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat3_必$學分數),"學分，\n   平均為",
+    sum(Stat3_必_加權)/sum(Stat3_必$學分數),"分;\n ",sum(Stat3_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat3_選$學分數),"學分，\n   平均為",
+    sum(Stat3_選_加權)/sum(Stat3_選$學分數),"分;\n ",sum(Stat3_通$選修別=="通"),"門通識，\n   共",
+    sum(Stat3_通$學分數),"學分，\n   平均為",
+    sum(Stat3_通_加權)/sum(Stat3_通$學分數),"分。")
+```
+
+###第一學期
+```{R}
+#全部
+Stat31_加權=Stat31[4]*Stat31[5]
+
+data_Stat31=t(transmute(Stat31,科目名稱,學期成績))
+colnames(data_Stat31) <- data_Stat31[1,]
+data_Stat31=data_Stat31[-1,]
+data_Stat31=t(data_Stat31)
+fStat31=read_csv("fStat31.csv")
+
+Stat_f31=ggradar(fStat31,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Stat31_必=Stat31[grepl("必",Stat31$選修別),]
+Stat31_必_加權=Stat31_必[4]*Stat31_必[5]
+Stat31_選=Stat31[grepl("選",Stat31$選修別),]
+Stat31_選_加權=Stat31_選[4]*Stat31_選[5]
+Stat31_通=Stat31[grepl("通",Stat31$選修別),]
+Stat31_通_加權=Stat31_通[4]*Stat31_通[5]
+
+cat("您總共修了",nrow(Stat31),"門課，\n 共",
+    sum(Stat31$學分數),"學分，\n 總平均為",
+    sum(Stat31_加權)/sum(Stat31$學分數),"分;\n\n其中，修了\n ",sum(Stat31_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat31_必$學分數),"學分，\n   平均為",
+    sum(Stat31_必_加權)/sum(Stat31_必$學分數),"分;\n ",sum(Stat31_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat31_選$學分數),"學分，\n   平均為",
+    sum(Stat31_選_加權)/sum(Stat31_選$學分數),"分;\n ",sum(Stat31_通$選修別=="通"),"門通識，\n   共",
+    sum(Stat31_通$學分數),"學分，\n   平均為",
+    sum(Stat31_通_加權)/sum(Stat31_通$學分數),"分。")
+```
+
+###第二學期
+```{R}
+#全部
+Stat32_加權=Stat32[4]*Stat32[5]
+
+data_Stat32=t(transmute(Stat32,科目名稱,學期成績))
+colnames(data_Stat32) <- data_Stat32[1,]
+data_Stat32=data_Stat32[-1,]
+data_Stat32=t(data_Stat32)
+fStat32=read_csv("fStat32.csv")
+
+Stat_f32=ggradar(fStat32,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Stat32_必=Stat32[grepl("必",Stat32$選修別),]
+Stat32_必_加權=Stat32_必[4]*Stat32_必[5]
+Stat32_選=Stat32[grepl("選",Stat32$選修別),]
+Stat32_選_加權=Stat32_選[4]*Stat32_選[5]
+Stat32_通=Stat32[grepl("通",Stat32$選修別),]
+Stat32_通_加權=Stat32_通[4]*Stat32_通[5]
+
+cat("您總共修了",nrow(Stat32),"門課，\n 共",
+    sum(Stat32$學分數),"學分，\n 總平均為",
+    sum(Stat32_加權)/sum(Stat32$學分數),"分;\n\n其中，修了\n ",sum(Stat32_必$選修別=="必"),"門必修，\n   共",
+    sum(Stat32_必$學分數),"學分，\n   平均為",
+    sum(Stat32_必_加權)/sum(Stat32_必$學分數),"分;\n ",sum(Stat32_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat32_選$學分數),"學分，\n   平均為",
+    sum(Stat32_選_加權)/sum(Stat32_選$學分數),"分;\n ",sum(Stat32_通$選修別=="通"),"門通識，\n   共",
+    sum(Stat32_通$學分數),"學分，\n   平均為",
+    sum(Stat32_通_加權)/sum(Stat32_通$學分數),"分。")
+```
+
+##第四學年
+```{r}
+#全部
+Stat4_加權=Stat4[5]*Stat4[6]
+Stat4_必=Stat4[grepl("必",Stat4$選修別),]
+Stat4_必_加權=Stat4_必[5]*Stat4_必[6]
+Stat4_選=Stat4[grepl("選",Stat4$選修別),]
+Stat4_選_加權=Stat4_選[5]*Stat4_選[6]
+Stat4_通=Stat4[grepl("通",Stat4$選修別),]
+Stat4_通_加權=Stat4_通[5]*Stat4_通[6]
+
+cat("您總共修了",nrow(Stat4),"門課，\n 共",
+    sum(Stat4$學分數),"學分，\n 總平均為",
+    sum(Stat4_加權)/sum(Stat4$學分數),"分;\n\n其中，修了\n ",sum(Stat4_必$選修別=="必"),"門必修;\n ",sum(Stat4_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat4_選$學分數),"學分，\n   平均為",
+    sum(Stat4_選_加權)/sum(Stat4_選$學分數),"分;\n ",sum(Stat4_通$選修別=="通"),"門通識，\n   共",
+    sum(Stat4_通$學分數),"學分，\n   平均為",
+    sum(Stat4_通_加權)/sum(Stat4_通$學分數),"分。")
+```
+
+###第一學期
+```{R}
+#全部
+Stat41_加權=Stat41[4]*Stat41[5]
+
+data_Stat41=t(transmute(Stat41,科目名稱,學期成績))
+colnames(data_Stat41) <- data_Stat41[1,]
+data_Stat41=data_Stat41[-1,]
+data_Stat41=t(data_Stat41)
+fStat41=read_csv("fStat41.csv")
+
+Stat_f41=ggradar(fStat41,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Stat41_必=Stat41[grepl("必",Stat41$選修別),]
+Stat41_必_加權=Stat41_必[4]*Stat41_必[5]
+Stat41_選=Stat41[grepl("選",Stat41$選修別),]
+Stat41_選_加權=Stat41_選[4]*Stat41_選[5]
+Stat41_通=Stat41[grepl("通",Stat41$選修別),]
+Stat41_通_加權=Stat41_通[4]*Stat41_通[5]
+
+cat("您總共修了",nrow(Stat41),"門課，\n 共",
+    sum(Stat41$學分數),"學分，\n 總平均為",
+    sum(Stat41_加權)/sum(Stat41$學分數),"分;\n\n其中，修了\n ",sum(Stat41_必$選修別=="必"),"門必修，;\n ",sum(Stat41_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat41_選$學分數),"學分，\n   平均為",
+    sum(Stat41_選_加權)/sum(Stat41_選$學分數),"分;\n ",sum(Stat41_通$選修別=="通"),"門通識\n   共",
+    sum(Stat41_通$學分數),"學分，\n   平均為",
+    sum(Stat41_通_加權)/sum(Stat41_通$學分數),"分。")
+```
+
+###第二學期
+```{R}
+#全部
+Stat42_加權=Stat42[4]*Stat42[5]
+
+data_Stat42=t(transmute(Stat42,科目名稱,學期成績))
+colnames(data_Stat42) <- data_Stat42[1,]
+data_Stat42=data_Stat42[-1,]
+data_Stat42=t(data_Stat42)
+fStat42=read_csv("fStat42.csv")
+
+Stat_f42=ggradar(fStat42,
+                legend.text.size=3,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#2894FF"),
+                group.line.width = 1,
+                group.point.size = 4)
+
+
+Stat42_必=Stat42[grepl("必",Stat42$選修別),]
+Stat42_必_加權=Stat42_必[4]*Stat42_必[5]
+Stat42_選=Stat42[grepl("選",Stat42$選修別),]
+Stat42_選_加權=Stat42_選[4]*Stat42_選[5]
+Stat42_通=Stat42[grepl("通",Stat42$選修別),]
+Stat42_通_加權=Stat42_通[4]*Stat42_通[5]
+
+cat("您總共修了",nrow(Stat42),"門課，\n 共",
+    sum(Stat42$學分數),"學分，\n 總平均為",
+    sum(Stat42_加權)/sum(Stat42$學分數),"分;\n\n其中，修了\n ",sum(Stat42_必$選修別=="必"),"門必修;\n ",sum(Stat42_選$選修別=="選"),"門選修，\n   共",
+    sum(Stat42_選$學分數),"學分，\n   平均為",
+    sum(Stat42_選_加權)/sum(Stat42_選$學分數),"分;\n ",sum(Stat42_通$選修別=="通"),"門通識\n   共",
+    sum(Stat42_通$學分數),"學分，\n   平均為",
+    sum(Stat42_通_加權)/sum(Stat42_通$學分數),"分。")
+```
+
+
+
+#進步幅度
+##Acc
+###第一學年
+```{r}
+Acc_f1=ggradar(fAcc1,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours =c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+save(Acc_f1,file="Acc_f1.Rda")
+
+dAcc1=fAcc1*100
+dAcc1$學期=dAcc1$學期/100
+
+```
+
+###第二學年
+```{r}
+Acc_f2=ggradar(fAcc2,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dAcc2=fAcc2*100
+dAcc2$學期=dAcc2$學期/100
+```
+
+###第三學年
+```{r}
+Acc_f3=ggradar(fAcc3,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dAcc3=fAcc3*100
+dAcc3$學期=dAcc3$學期/100
+```
+
+
+###第四學年
+```{r}
+Acc_f4=ggradar(fAcc4,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dAcc4=fAcc4*100
+dAcc4$學期=dAcc4$學期/100
+```
+
+```{r}
+Acc1_credit=read_csv("Acc1_credit.csv",locale = locale(encoding = "utf-8"))
+save(Acc1_credit,file = "Acc1_credit.Rda")
+Acc2_credit=read_csv("Acc2_credit.csv",locale = locale(encoding = "utf-8"))
+save(Acc2_credit,file = "Acc2_credit.Rda")
+Acc3_credit=read_csv("Acc3_credit.csv",locale = locale(encoding = "utf-8"))
+save(Acc3_credit,file = "Acc3_credit.Rda")
+fAcc4=read_csv("fAcc4.csv",locale = locale(encoding = "utf-8"))
+save(Acc4_credit,file = "Acc4_credit.Rda")
+```
+
+
+
+##Econ
+###第一學年
+```{r}
+Econ_f1=ggradar(fEcon1,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dEcon1=fEcon1*100
+dEcon1$學期=dEcon1$學期/100
+```
+
+###第二學年
+```{r}
+Econ_f2=ggradar(fEcon2,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dEcon2=fEcon2*100
+dEcon2$學期=dEcon2$學期/100
+```
+
+###第三學年
+```{r}
+Econ_f3=ggradar(fEcon3,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dEcon3=fEcon3*100
+dEcon3$學期=dEcon3$學期/100
+```
+
+###第四學年
+```{r}
+Econ_f4=ggradar(fEcon4,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dEcon4=fEcon4*100
+dEcon4$學期=dEcon4$學期/100
+```
+
+
+##Stat
+###第一學年
+```{r}
+Stat_f1=ggradar(fStat1,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dStat1=fStat1*100
+dStat1$學期=dStat1$學期/100
+```
+
+###第二學年
+```{r}
+Stat_f2=ggradar(fStat2,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dStat2=fStat2*100
+dStat2$學期=dStat2$學期/100
+```
+
+###第三學年
+```{r}
+Stat_f3=ggradar(fStat3,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dStat3=fStat3*100
+dStat3$學期=dStat3$學期/100
+```
+
+###第四學年
+```{r}
+Stat_f4=ggradar(fStat4,
+                legend.text.size=10,
+                axis.label.size =4,
+                grid.label.size = 4,
+                values.radar = c("0%", "60%","100%"),
+                label.gridline.min = T,
+                grid.max = 1,
+                grid.mid = 0.6,
+                group.colours = c("#00BBFF","#D28EFF"),
+                group.line.width = 1,
+                group.point.size = 4,
+                legend.title = "學期")
+
+dStat4=fStat4*100
+dStat4$學期=dStat4$學期/100
+```
+
+#畢業學分
+##Acc
+```{r}
+Acc1_credit=read_csv("Acc1_credit.csv",
+              locale = locale(encoding = "utf-8"))
+
+Acc1_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fAcc1_credit
+
+save(fAcc1_credit,file = "fAcc1_credit.Rda")
+
+dAcc1_credit=read_csv("dAcc1_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dAcc1_credit,file = "dAcc1_credit.Rda")
+
+Acc2_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fAcc2_credit
+
+save(fAcc2_credit,file = "fAcc2_credit.Rda")
+
+dAcc2_credit=read_csv("dAcc2_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dAcc2_credit,file = "dAcc2_credit.Rda")
+
+Acc3_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fAcc3_credit
+
+save(fAcc3_credit,file = "fAcc3_credit.Rda")
+
+dAcc3_credit=read_csv("dAcc3_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dAcc3_credit,file = "dAcc3_credit.Rda")
+
+Acc4_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fAcc4_credit
+
+save(fAcc4_credit,file = "fAcc4_credit.Rda")
+
+dAcc4_credit=read_csv("dAcc4_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dAcc4_credit,file = "dAcc4_credit.Rda")
+```
+
+##Econ
+```{r}
+Econ1_credit=read_csv("Econ1_credit.csv",
+              locale = locale(encoding = "utf-8"))
+
+Econ1_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fEcon1_credit
+
+save(fEcon1_credit,file = "fEcon1_credit.Rda")
+
+dEcon1_credit=read_csv("dEcon1_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dEcon1_credit,file = "dEcon1_credit.Rda")
+
+Econ2_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fEcon2_credit
+
+save(fEcon2_credit,file = "fEcon2_credit.Rda")
+
+dEcon2_credit=read_csv("dEcon2_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dEcon2_credit,file = "dEcon2_credit.Rda")
+
+Econ3_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fEcon3_credit
+
+save(fEcon3_credit,file = "fEcon3_credit.Rda")
+
+dEcon3_credit=read_csv("dEcon3_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dEcon3_credit,file = "dEcon3_credit.Rda")
+
+Econ4_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fEcon4_credit
+
+save(fEcon4_credit,file = "fEcon4_credit.Rda")
+
+dEcon4_credit=read_csv("dEcon4_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dEcon4_credit,file = "dEcon4_credit.Rda")
+```
+
+##Stat
+```{r}
+Stat1_credit=read_csv("Stat1_credit.csv",
+              locale = locale(encoding = "utf-8"))
+
+Stat1_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fStat1_credit
+
+save(fStat1_credit,file = "fStat1_credit.Rda")
+
+dStat1_credit=read_csv("dStat1_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dStat1_credit,file = "dStat1_credit.Rda")
+
+Stat2_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fStat2_credit
+
+save(fStat2_credit,file = "fStat2_credit.Rda")
+
+dStat2_credit=read_csv("dStat2_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dStat2_credit,file = "dStat2_credit.Rda")
+
+Stat3_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fStat3_credit
+
+save(fStat3_credit,file = "fStat3_credit.Rda")
+
+dStat3_credit=read_csv("dStat3_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dStat3_credit,file = "dStat3_credit.Rda")
+
+Stat4_credit %>%
+  ggplot()+
+  aes(x = 類型,
+      y = 比例,
+      fill = 狀態) +
+  geom_col() +
+  geom_text(mapping = aes(label = sprintf("%.1f%%",
+                                          比例*100)),
+            size = 2.3,
+            colour = 'black',
+            vjust = 1,
+            hjust = .5)+
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(angle = 0,vjust=1.1,
+                                    margin = margin(r = -24)),
+        axis.title.y.right = element_text(angle = 0, vjust = 1,
+                                          margin = margin(l = -10)),
+        axis.text.x = element_text(angle = 45, hjust = 1
+        ))->fStat4_credit
+
+save(fStat4_credit,file = "fStat4_credit.Rda")
+
+dStat4_credit=read_csv("dStat4_credit.csv",
+              locale = locale(encoding = "utf-8"))
+save(dStat4_credit,file = "dStat4_credit.Rda")
+```
+

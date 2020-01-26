@@ -1,0 +1,761 @@
+---
+title: "Transcript-Econ"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: "simplex"
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dplyr)
+```
+
+
+```{r}
+load("C:/Users/SHIUAN/Downloads/finalProject.Rda")
+
+gradeData2=select(gradeData,
+       -授課語言,-科目代碼,-班別,學年)
+gradeData2$上課時間及教室=substr(
+  gradeData2$上課時間及教室,1,6)
+gradeData2$星期=substr(
+  gradeData2$上課時間及教室,3,3)
+gradeData2$節次=substr(
+  gradeData2$上課時間及教室,4,6)
+
+gradeData2=gradeData2[-11]
+colnames(gradeData2)=c("系級","學期成績","科目名稱",
+                       "學分數","開課系所","修課人數",
+                       "授課老師","學年","學期",
+                       "選修別","星期","節次")
+gradeData2$科目名稱=gsub("國文：經典閱讀與詮釋", "國文",
+                     gradeData2$科目名稱)
+
+Econ=gradeData2[grepl("經濟學",gradeData2$系級),]
+Econ_all=select(Econ,
+       學年,學期,科目名稱,選修別,授課老師,學分數,學期成績)
+Econ1=Econ_all[grepl("100",Econ_all$學年),][-1]
+rownames(Econ1)=NULL
+Econ2=Econ_all[grepl("101",Econ_all$學年),][-1]
+rownames(Econ2)=NULL
+Econ3=Econ_all[grepl("102",Econ_all$學年),][-1]
+rownames(Econ3)=NULL
+Econ4=Econ_all[grepl("103",Econ_all$學年),][-1]
+rownames(Econ4)=NULL
+Econ11=Econ1[grepl("1",Econ1$學期),][-1]
+Econ12=Econ1[grepl("2",Econ1$學期),][-1]
+Econ21=Econ2[grepl("1",Econ2$學期),][-1]
+Econ22=Econ2[grepl("2",Econ2$學期),][-1]
+Econ31=Econ3[grepl("1",Econ3$學期),][-1]
+Econ32=Econ3[grepl("2",Econ3$學期),][-1]
+Econ41=Econ4[grepl("1",Econ4$學期),][-1]
+Econ42=Econ4[grepl("2",Econ4$學期),][-1]
+rownames(Econ_all)=NULL
+rownames(Econ12)=NULL
+rownames(Econ21)=NULL
+rownames(Econ22)=NULL
+rownames(Econ31)=NULL
+rownames(Econ32)=NULL
+rownames(Econ41)=NULL
+rownames(Econ42)=NULL
+rownames(Econ11)=NULL
+rownames(Econ12)=NULL
+rownames(Econ21)=NULL
+rownames(Econ22)=NULL
+rownames(Econ31)=NULL
+rownames(Econ32)=NULL
+rownames(Econ41)=NULL
+rownames(Econ42)=NULL
+
+
+
+
+##全部
+Econ_all_加權=Econ_all[6]*Econ_all[7]
+Econ_all_必=Econ_all[grepl("必",Econ_all$選修別),]
+Econ_all_必_加權=Econ_all_必[6]*Econ_all_必[7]
+Econ_all_選=Econ_all[grepl("選",Econ_all$選修別),]
+Econ_all_選_加權=Econ_all_選[6]*Econ_all_選[7]
+Econ_all_通=Econ_all[grepl("通",Econ_all$選修別),]
+Econ_all_通_加權=Econ_all_通[6]*Econ_all_通[7]
+
+
+##第一學年
+Econ1_加權=Econ1[5]*Econ1[6]
+Econ1_必=Econ1[grepl("必",Econ1$選修別),]
+Econ1_必_加權=Econ1_必[5]*Econ1_必[6]
+Econ1_選=Econ1[grepl("選",Econ1$選修別),]
+Econ1_選_加權=Econ1_選[5]*Econ1_選[6]
+Econ1_通=Econ1[grepl("通",Econ1$選修別),]
+Econ1_通_加權=Econ1_通[5]*Econ1_通[6]
+
+##第二學年
+Econ2_加權=Econ2[5]*Econ2[6]
+Econ2_必=Econ2[grepl("必",Econ2$選修別),]
+Econ2_必_加權=Econ2_必[5]*Econ2_必[6]
+Econ2_選=Econ2[grepl("選",Econ2$選修別),]
+Econ2_選_加權=Econ2_選[5]*Econ2_選[6]
+Econ2_通=Econ2[grepl("通",Econ2$選修別),]
+Econ2_通_加權=Econ2_通[5]*Econ2_通[6]
+
+##第三學年
+Econ3_加權=Econ3[5]*Econ3[6]
+Econ3_必=Econ3[grepl("必",Econ3$選修別),]
+Econ3_必_加權=Econ3_必[5]*Econ3_必[6]
+Econ3_選=Econ3[grepl("選",Econ3$選修別),]
+Econ3_選_加權=Econ3_選[5]*Econ3_選[6]
+Econ3_通=Econ3[grepl("通",Econ3$選修別),]
+Econ3_通_加權=Econ3_通[5]*Econ3_通[6]
+
+##第四學年
+Econ4_加權=Econ4[5]*Econ4[6]
+Econ4_必=Econ4[grepl("必",Econ4$選修別),]
+Econ4_必_加權=Econ4_必[5]*Econ4_必[6]
+Econ4_選=Econ4[grepl("選",Econ4$選修別),]
+Econ4_選_加權=Econ4_選[5]*Econ4_選[6]
+Econ4_通=Econ4[grepl("通",Econ4$選修別),]
+Econ4_通_加權=Econ4_通[5]*Econ4_通[6]
+
+###學期
+Econ11_加權=Econ11[4]*Econ11[5]
+Econ11_必=Econ11[grepl("必",Econ11$選修別),]
+Econ11_必_加權=Econ11_必[4]*Econ11_必[5]
+Econ11_選=Econ11[grepl("選",Econ11$選修別),]
+Econ11_選_加權=Econ11_選[4]*Econ11_選[5]
+Econ11_通=Econ11[grepl("通",Econ11$選修別),]
+Econ11_通_加權=Econ11_通[4]*Econ11_通[5]
+
+Econ12_加權=Econ12[4]*Econ12[5]
+Econ12_必=Econ12[grepl("必",Econ12$選修別),]
+Econ12_必_加權=Econ12_必[4]*Econ12_必[5]
+Econ12_選=Econ12[grepl("選",Econ12$選修別),]
+Econ12_選_加權=Econ12_選[4]*Econ12_選[5]
+Econ12_通=Econ12[grepl("通",Econ12$選修別),]
+Econ12_通_加權=Econ12_通[4]*Econ12_通[5]
+
+Econ21_加權=Econ21[4]*Econ21[5]
+Econ21_必=Econ21[grepl("必",Econ21$選修別),]
+Econ21_必_加權=Econ21_必[4]*Econ21_必[5]
+Econ21_選=Econ21[grepl("選",Econ21$選修別),]
+Econ21_選_加權=Econ21_選[4]*Econ21_選[5]
+Econ21_通=Econ21[grepl("通",Econ21$選修別),]
+Econ21_通_加權=Econ21_通[4]*Econ21_通[5]
+
+Econ22_加權=Econ22[4]*Econ22[5]
+Econ22_必=Econ22[grepl("必",Econ22$選修別),]
+Econ22_必_加權=Econ22_必[4]*Econ22_必[5]
+Econ22_選=Econ22[grepl("選",Econ22$選修別),]
+Econ22_選_加權=Econ22_選[4]*Econ22_選[5]
+Econ22_通=Econ22[grepl("通",Econ22$選修別),]
+Econ22_通_加權=Econ22_通[4]*Econ22_通[5]
+
+Econ31_加權=Econ31[4]*Econ31[5]
+Econ31_必=Econ31[grepl("必",Econ31$選修別),]
+Econ31_必_加權=Econ31_必[4]*Econ31_必[5]
+Econ31_選=Econ31[grepl("選",Econ31$選修別),]
+Econ31_選_加權=Econ31_選[4]*Econ31_選[5]
+Econ31_通=Econ31[grepl("通",Econ31$選修別),]
+Econ31_通_加權=Econ31_通[4]*Econ31_通[5]
+
+Econ32_加權=Econ32[4]*Econ32[5]
+Econ32_必=Econ32[grepl("必",Econ32$選修別),]
+Econ32_必_加權=Econ32_必[4]*Econ32_必[5]
+Econ32_選=Econ32[grepl("選",Econ32$選修別),]
+Econ32_選_加權=Econ32_選[4]*Econ32_選[5]
+Econ32_通=Econ32[grepl("通",Econ32$選修別),]
+Econ32_通_加權=Econ32_通[4]*Econ32_通[5]
+
+Econ41_加權=Econ41[4]*Econ41[5]
+Econ41_必=Econ41[grepl("必",Econ41$選修別),]
+Econ41_必_加權=Econ41_必[4]*Econ41_必[5]
+Econ41_選=Econ41[grepl("選",Econ41$選修別),]
+Econ41_選_加權=Econ41_選[4]*Econ41_選[5]
+Econ41_通=Econ41[grepl("通",Econ41$選修別),]
+Econ41_通_加權=Econ41_通[4]*Econ41_通[5]
+
+Econ42_加權=Econ42[4]*Econ42[5]
+Econ42_必=Econ42[grepl("必",Econ42$選修別),]
+Econ42_必_加權=Econ42_必[4]*Econ42_必[5]
+Econ42_選=Econ42[grepl("選",Econ42$選修別),]
+Econ42_選_加權=Econ42_選[4]*Econ42_選[5]
+Econ42_通=Econ42[grepl("通",Econ42$選修別),]
+Econ42_通_加權=Econ42_通[4]*Econ42_通[5]
+```
+
+```{r}
+load("Econ_f1.Rda")
+load("Econ_f2.Rda")
+load("Econ_f3.Rda")
+load("Econ_f4.Rda")
+
+load("Econ_f11.Rda")
+load("Econ_f12.Rda")
+load("Econ_f21.Rda")
+load("Econ_f22.Rda")
+load("Econ_f31.Rda")
+load("Econ_f32.Rda")
+load("Econ_f41.Rda")
+load("Econ_f42.Rda")
+
+load("fEcon1.Rda")
+load("fEcon2.Rda")
+load("fEcon3.Rda")
+load("fEcon4.Rda")
+
+load("fEcon1_credit.Rda")
+load("fEcon2_credit.Rda")
+load("fEcon3_credit.Rda")
+load("fEcon4_credit.Rda")
+
+load("dEcon1_credit.Rda")
+load("dEcon2_credit.Rda")
+load("dEcon3_credit.Rda")
+load("dEcon4_credit.Rda")
+```
+
+```{r}
+dEcon1=fEcon1*100
+dEcon1$學期=dEcon1$學期/100
+dEcon1=dEcon1[-1]
+dEcon1=rbind(dEcon1,dEcon1[2,]-dEcon1[1,])
+dEcon1=t(dEcon1)
+colnames(dEcon1)=c(1,2,"進步幅度")
+
+dEcon2=fEcon2*100
+dEcon2$學期=dEcon2$學期/100
+dEcon2=dEcon2[-1]
+dEcon2=rbind(dEcon2,dEcon2[2,]-dEcon2[1,])
+dEcon2=t(dEcon2)
+colnames(dEcon2)=c(1,2,"進步幅度")
+
+dEcon3=fEcon3*100
+dEcon3$學期=dEcon3$學期/100
+dEcon3=dEcon3[-1]
+dEcon3=rbind(dEcon3,dEcon3[2,]-dEcon3[1,])
+dEcon3=t(dEcon3)
+colnames(dEcon3)=c(1,2,"進步幅度")
+
+dEcon4=fEcon4*100
+dEcon4$學期=dEcon4$學期/100
+dEcon4=dEcon4[-1]
+dEcon4=rbind(dEcon4,dEcon4[2,]-dEcon4[1,])
+dEcon4=t(dEcon4)
+colnames(dEcon4)=c(1,2,"進步幅度")
+```
+
+
+
+
+歷年成績 {data-icon="fa-bar-chart"}
+=====================================
+Column {.tabset }
+-------------------------------------
+### 四年總結
+```{r }
+cat("您總共修了",nrow(Econ_all),"門課，\n 共",
+    sum(Econ_all$學分數),"學分，\n 總平均為",
+    sum(Econ_all_加權)/sum(Econ_all$學分數),"分;\n其中，修了\n ",sum(Econ_all_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ_all_必$學分數),"學分，\n   平均為",
+    sum(Econ_all_必_加權)/sum(Econ_all_必$學分數),"分;\n ",sum(Econ_all_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ_all_選$學分數),"學分，\n   平均為",
+    sum(Econ_all_選_加權)/sum(Econ_all_選$學分數),"分;\n ",sum(Econ_all_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ_all_通$學分數),"學分，\n   平均為",
+    sum(Econ_all_通_加權)/sum(Econ_all_通$學分數),"分。")
+
+cat("102學年度上學期的學期成績最高，而100學年度上學期的學期成績最低。")
+
+
+cat("其中，星期二和星期四的課最多，而星期一最少；
+    5~6節的課最多，而1~2節最少。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ_all, options = list( bPaginate = FALSE))
+```
+
+Column {.tabset}
+-------------------------------------
+### 各學期平均
+```{r}
+學期 <- c('1','2','3','4','5','6','7','8')
+平均分數 <- c(66.1,72.30,74.70,76.68,86.5,78.24,82.23,85.2)
+dEcon <- data.frame(學期 = 學期, 平均分數 = 平均分數)
+library(ggplot2)
+fEcon_all=ggplot(dEcon,aes(x=學期,y=平均分數,group=1)) +
+			geom_line(size =0.8,color="#EA0000")+ 
+				geom_point(size=1,color="#EA0000")+
+  theme(plot.background = element_rect(colour = "black",
+                                       size = 3,
+                                       fill ="#C4E1FF"),
+        axis.title.y = element_text(angle = 0,vjust=1,
+                                    margin = margin(r = -15)),
+        plot.margin = unit(c(0.2, 0.2, 0.2, 0.2), "inches"))
+library(plotly)
+ggplotly(fEcon_all)
+```
+
+### 趣味小統計-星期
+```{r}
+星期 <- c('一','二','三','四','五')
+次數 <- c(9,16,12,16,14)
+dEcon_wd <- data.frame(星期 = 星期, 次數 = 次數)
+library(ggplot2)
+fEcon_wd=ggplot(dEcon_wd, aes(x=星期, y=次數)) + geom_bar(stat="identity",fill="#0080FF")+theme(plot.background = element_rect(colour = "black",
+    size = 3,
+    fill ="#C4E1FF"))
+library(plotly)
+ggplotly(fEcon_wd)
+```
+
+### 趣味小統計-節次
+```{r}
+節次 <- c("1~2","2~4","3~4","5~6","5~7","6~8","7~8","7~9")
+次數 <- c(3,13,15,15,5,2,12,2 )
+dEcon_t <- data.frame(節次 = 節次, 次數 = 次數)
+library(ggplot2)
+fEcon_t=ggplot(dEcon_t, aes(x=節次, y=次數)) +
+  geom_bar(stat="identity",fill="#0080FF")+
+  theme(plot.background = element_rect(colour = "black",
+    size = 3,
+    fill ="#C4E1FF"))
+library(plotly)
+ggplotly(fEcon_t)
+
+```
+
+
+全學年 {data-navmenu="100學年度"}
+=====================================
+
+Column {.tabset }
+-------------------------------------
+
+### 本年度小結
+
+```{r}
+cat("您總共修了",nrow(Econ1),"門課，\n 共",
+    sum(Econ1$學分數),"學分，\n 總平均為",
+    sum(Econ1_加權)/sum(Econ1$學分數),"分;\n\n其中，修了\n ",sum(Econ1_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ1_必$學分數),"學分，\n   平均為",
+    sum(Econ1_必_加權)/sum(Econ1_必$學分數),"分;\n ",sum(Econ1_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ1_選$學分數),"學分，\n   平均為",
+    sum(Econ1_選_加權)/sum(Econ1_選$學分數),"分;\n ",sum(Econ1_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+
+```{r}
+DT::datatable(Econ1, options = list( bPaginate = FALSE)) 
+```
+
+
+### 進步幅度(成績單)
+```{r}
+DT::datatable(dEcon1, options = list( bPaginate = FALSE)) 
+```
+
+### 畢業進度(成績單)
+```{r}
+DT::datatable(dEcon1_credit, options = list( bPaginate = FALSE)) 
+```
+
+
+Column {.tabset}
+---------------------------
+### 進步幅度(雷達圖)
+```{r}
+Econ_f1
+```
+
+### 畢業進度
+```{r}
+fEcon1_credit
+```
+
+### 說明
+```{r}
+cat("1.在本年度上學期時，微積分不及格，\n計入學期小結、年度小結中的課程級學分，但不記入畢業學分。\n2.在畢業進度(雷達圖)中，若該部分之學分超過所需之畢業學分，將以100%計算。\n3.全學年之進步幅度(雷達圖)僅使用上下學期有重複修習的課程。")
+```
+
+第一學期 {data-navmenu="100學年度"}
+=====================================
+
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Econ11),"門課，\n 共",
+    sum(Econ11$學分數),"學分，\n 總平均為",
+    sum(Econ11_加權)/sum(Econ11$學分數),"分;\n\n其中，修了\n ",sum(Econ11_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ11_必$學分數),"學分，\n   平均為",
+    sum(Econ11_必_加權)/sum(Econ11_必$學分數),"分;\n ",sum(Econ11_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ11_選$學分數),"學分，\n   平均為",
+    sum(Econ11_選_加權)/sum(Econ11_選$學分數),"分;\n ",sum(Econ11_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ11, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Econ_f11
+```
+
+
+
+第二學期 {data-navmenu="100學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Econ12),"門課，\n 共",
+    sum(Econ12$學分數),"學分，\n 總平均為",
+    sum(Econ12_加權)/sum(Econ12$學分數),"分;\n\n其中，修了\n ",sum(Econ12_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ12_必$學分數),"學分，\n   平均為",
+    sum(Econ12_必_加權)/sum(Econ12_必$學分數),"分;\n ",sum(Econ12_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ12_選$學分數),"學分，\n   平均為",
+    sum(Econ12_選_加權)/sum(Econ12_選$學分數),"分;\n ",sum(Econ12_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ12, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Econ_f12
+```
+
+
+
+全學年 {data-navmenu="101學年度"}
+=====================================
+Column {.tabset }
+-------------------------------------
+
+### 本年度小結
+
+```{r}
+cat("您總共修了",nrow(Econ2),"門課，\n 共",
+    sum(Econ2$學分數),"學分，\n 總平均為",
+    sum(Econ2_加權)/sum(Econ2$學分數),"分;\n\n其中，修了\n ",sum(Econ2_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ2_必$學分數),"學分，\n   平均為",
+    sum(Econ2_必_加權)/sum(Econ2_必$學分數),"分;\n ",sum(Econ2_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ2_選$學分數),"學分，\n   平均為",
+    sum(Econ2_選_加權)/sum(Econ2_選$學分數),"分;\n ",sum(Econ2_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ2_通$學分數),"學分，\n   平均為",
+    sum(Econ2_通_加權)/sum(Econ2_通$學分數),"分。")
+```
+
+### 成績單
+
+```{r}
+DT::datatable(Econ2, options = list( bPaginate = FALSE)) 
+```
+
+
+### 進步幅度(成績單)
+```{r}
+DT::datatable(dEcon2, options = list( bPaginate = FALSE)) 
+```
+
+### 畢業進度(成績單)
+```{r}
+DT::datatable(dEcon2_credit, options = list( bPaginate = FALSE)) 
+```
+
+
+Column {.tabset }
+---------------------------
+### 進步幅度(雷達圖)
+```{r}
+Econ_f2
+```
+
+### 畢業進度
+```{r}
+fEcon2_credit
+```
+
+
+第一學期 {data-navmenu="101學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Econ21),"門課，\n 共",
+    sum(Econ21$學分數),"學分，\n 總平均為",
+    sum(Econ21_加權)/sum(Econ21$學分數),"分;\n\n其中，修了\n ",sum(Econ21_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ21_必$學分數),"學分，\n   平均為",
+    sum(Econ21_必_加權)/sum(Econ21_必$學分數),"分;\n ",sum(Econ21_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ21_選$學分數),"學分，\n   平均為",
+    sum(Econ21_選_加權)/sum(Econ21_選$學分數),"分;\n ",sum(Econ21_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ21_通$學分數),"學分，\n   平均為",
+    sum(Econ21_通_加權)/sum(Econ21_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ21, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Econ_f21
+```
+
+
+
+第二學期 {data-navmenu="101學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Econ22),"門課，\n 共",
+    sum(Econ22$學分數),"學分，\n 總平均為",
+    sum(Econ22_加權)/sum(Econ22$學分數),"分;\n\n其中，修了\n ",sum(Econ22_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ22_必$學分數),"學分，\n   平均為",
+    sum(Econ22_必_加權)/sum(Econ22_必$學分數),"分;\n ",sum(Econ22_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ22_選$學分數),"學分，\n   平均為",
+    sum(Econ22_選_加權)/sum(Econ22_選$學分數),"分;\n ",sum(Econ22_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ22_通$學分數),"學分，\n   平均為",
+    sum(Econ22_通_加權)/sum(Econ22_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ22, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Econ_f22
+```
+
+
+全學年 {data-navmenu="102學年度"}
+=====================================
+Column {.tabset }
+-------------------------------------
+
+### 本年度小結
+
+```{r}
+cat("您總共修了",nrow(Econ3),"門課，\n 共",
+    sum(Econ3$學分數),"學分，\n 總平均為",
+    sum(Econ3_加權)/sum(Econ3$學分數),"分;\n\n其中，修了\n ",sum(Econ3_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ3_必$學分數),"學分，\n   平均為",
+    sum(Econ3_必_加權)/sum(Econ3_必$學分數),"分;\n ",sum(Econ3_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ3_選$學分數),"學分，\n   平均為",
+    sum(Econ3_選_加權)/sum(Econ3_選$學分數),"分;\n ",sum(Econ3_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ3_通$學分數),"學分，\n   平均為",
+    sum(Econ3_通_加權)/sum(Econ3_通$學分數),"分。")
+```
+
+### 成績單
+
+```{r}
+DT::datatable(Econ3, options = list( bPaginate = FALSE)) 
+```
+
+
+### 進步幅度(成績單)
+```{r}
+DT::datatable(dEcon3, options = list( bPaginate = FALSE)) 
+```
+
+### 畢業進度(成績單)
+```{r}
+DT::datatable(dEcon3_credit, options = list( bPaginate = FALSE)) 
+```
+
+
+Column {.tabset }
+---------------------------
+### 進步幅度(雷達圖)
+```{r}
+Econ_f3
+```
+
+### 畢業進度
+```{r}
+fEcon3_credit
+```
+
+
+第一學期 {data-navmenu="102學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Econ31),"門課，\n 共",
+    sum(Econ31$學分數),"學分，\n 總平均為",
+    sum(Econ31_加權)/sum(Econ31$學分數),"分;\n\n其中，修了\n ",sum(Econ31_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ31_必$學分數),"學分，\n   平均為",
+    sum(Econ31_必_加權)/sum(Econ31_必$學分數),"分;\n ",sum(Econ31_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ31_選$學分數),"學分，\n   平均為",
+    sum(Econ31_選_加權)/sum(Econ31_選$學分數),"分;\n ",sum(Econ31_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ31_通$學分數),"學分，\n   平均為",
+    sum(Econ31_通_加權)/sum(Econ31_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ31, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Econ_f31
+```
+
+
+第二學期 {data-navmenu="102學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Econ32),"門課，\n 共",
+    sum(Econ32$學分數),"學分，\n 總平均為",
+    sum(Econ32_加權)/sum(Econ32$學分數),"分;\n\n其中，修了\n ",sum(Econ32_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ32_必$學分數),"學分，\n   平均為",
+    sum(Econ32_必_加權)/sum(Econ32_必$學分數),"分;\n ",sum(Econ32_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ32_選$學分數),"學分，\n   平均為",
+    sum(Econ32_選_加權)/sum(Econ32_選$學分數),"分;\n ",sum(Econ32_通$選修別=="通"),"門通識，\n   共",
+    sum(Econ32_通$學分數),"學分，\n   平均為",
+    sum(Econ32_通_加權)/sum(Econ32_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ32, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Econ_f32
+```
+
+
+全學年 {data-navmenu="103學年度" data-icon="fas fa-graduation-cap"}
+=====================================
+Column {.tabset }
+-------------------------------------
+
+### 本年度小結
+
+```{r}
+cat("您總共修了",nrow(Econ4),"門課，\n 共",
+    sum(Econ4$學分數),"學分，\n 總平均為",
+    sum(Econ4_加權)/sum(Econ4$學分數),"分;\n\n其中，修了\n ",sum(Econ4_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ4_必$學分數),"學分，\n   平均為",
+    sum(Econ4_必_加權)/sum(Econ4_必$學分數),"分;\n ",sum(Econ4_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ4_選$學分數),"學分，\n   平均為",
+    sum(Econ4_選_加權)/sum(Econ4_選$學分數),"分;\n ",sum(Econ4_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+
+```{r}
+DT::datatable(Econ4, options = list( bPaginate = FALSE)) 
+```
+
+
+### 進步幅度(成績單)
+```{r}
+DT::datatable(dEcon4, options = list( bPaginate = FALSE)) 
+```
+
+### 畢業進度(成績單)
+```{r}
+DT::datatable(dEcon4_credit, options = list( bPaginate = FALSE)) 
+```
+
+
+Column {.tabset }
+---------------------------
+### 進步幅度(雷達圖)
+```{r}
+Econ_f4
+```
+
+### 畢業進度
+```{r}
+fEcon4_credit
+```
+
+
+第一學期 {data-navmenu="103學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Econ41),"門課，\n 共",
+    sum(Econ41$學分數),"學分，\n 總平均為",
+    sum(Econ41_加權)/sum(Econ41$學分數),"分;\n\n其中，修了\n ",sum(Econ41_必$選修別=="必"),"門必修，\n   共",
+    sum(Econ41_必$學分數),"學分，\n   平均為",
+    sum(Econ41_必_加權)/sum(Econ41_必$學分數),"分;\n ",sum(Econ41_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ41_選$學分數),"學分，\n   平均為",
+    sum(Econ41_選_加權)/sum(Econ41_選$學分數),"分;\n ",sum(Econ41_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ41, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Econ_f41
+```
+
+
+第二學期 {data-navmenu="103學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Econ42),"門課，\n 共",
+    sum(Econ42$學分數),"學分，\n 總平均為",
+    sum(Econ42_加權)/sum(Econ42$學分數),"分;\n\n其中，修了\n ",sum(Econ42_必$選修別=="必"),"門必修;\n ",sum(Econ42_選$選修別=="選"),"門選修，\n   共",
+    sum(Econ42_選$學分數),"學分，\n   平均為",
+    sum(Econ42_選_加權)/sum(Econ42_選$學分數),"分;\n ",sum(Econ42_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Econ42, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Econ_f42
+```
+

@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  <title>成績單</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+
+<SCRIPT LANGUAGE="JavaScript">
+function password(pwd) {
+	if (pwd=="會計學系")
+	  myWin=open("https://bookdown.org/chi2hsuan/transcript-acc/")
+	else if (pwd=="經濟學系")
+	   myWin=open("https://bookdown.org/chi2hsuan/transcript-econ/")
+	else if (pwd=="統計學系")
+	   myWin=open("https://bookdown.org/chi2hsuan/transcript-stat/")
+	else
+	   {
+	   alert("輸入錯誤，請閱讀下方說明後再次輸入。");
+	   location.href=".";
+      }
+}
+</script>
+
+
+</head>
+
+
+<style type= "text/css">
+.bodystyle{
+filter:alpha(opacity=20); 
+-moz-opacity:0.2; 
+-khtml-opacity: 0.2; 
+opacity: 0.4;
+height:100%;
+width:100%;
+position:absolute;
+}
+body{text-align:center}
+h1{text-align:center;}
+</style>
+
+	
+	<style>
+    input[type="submit"]{padding:5px 15px; background:#ccc; border:0 none;
+cursor:pointer;
+-webkit-border-radius: 5px;
+border-radius: 5px; }
+    
+    input[type="text"]{padding:5px 15px; border:2px black solid;
+cursor:pointer;
+-webkit-border-radius: 5px;
+border-radius: 5px; }
+    
+.demo{
+    padding-top: 50px;
+    text-align: center
+}
+  </style>
+	
+	<body>
+
+
+
+
+
+
+  
+<h2 align=center>成績查詢系統</h2>
+<hr>
+
+
+
+<form name=myform onsubmit="password(this.pwde.value)">
+<input type="text" name="pwde" placeholder="請在此輸入系所">
+<input type="submit" name="submit" value="送出">
+</form>
+
+
+<div class="bodystyle">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/National_Taipei_University_logo.svg/1200px-National_Taipei_University_logo.svg.png" width=100% height=100%></div>
+
+<div style="position:absolute ;">
+
+
+</div>
+
+
+<p>
+<table align="center" style="border:8px #FFD382 groove;" cellpadding="10" border='0'>
+
+<tr><td align="center">請輸入「會計學系」、｢經濟學系｣或「統計學系」；<p>
+若輸入其他文字，將無法進入成績單頁面。</td></tr>
+
+</table>
+
+<p>
+<table align="center" style="border:8px #FFC78E groove;" cellpadding="10" border='0'>
+
+<tr><td>說明：<p>
+1.本儀錶板是設計給個別學生使用，因此沒有將三位學生的成績單放在同一個儀表板，而是分成三個頁面。<p>
+2.首頁的部分應該是輸入學號及密碼，但因資料未提供，因此採輸入系所替代之。<p>
+3.目的是讓學生在成績單的儀表板中，可以看到想知道的資訊(已經盡量想了，也問了幾位同學)。</td></tr>
+
+
+	</body>
+</html>

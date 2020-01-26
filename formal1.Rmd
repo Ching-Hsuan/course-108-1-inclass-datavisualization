@@ -1,0 +1,760 @@
+---
+title: "Transcript-Acc"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: "simplex"
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dplyr)
+```
+
+
+```{r}
+load("C:/Users/SHIUAN/Downloads/finalProject.Rda")
+
+gradeData2=select(gradeData,
+       -授課語言,-科目代碼,-班別,學年)
+gradeData2$上課時間及教室=substr(
+  gradeData2$上課時間及教室,1,6)
+gradeData2$星期=substr(
+  gradeData2$上課時間及教室,3,3)
+gradeData2$節次=substr(
+  gradeData2$上課時間及教室,4,6)
+
+gradeData2=gradeData2[-11]
+colnames(gradeData2)=c("系級","學期成績","科目名稱",
+                       "學分數","開課系所","修課人數",
+                       "授課老師","學年","學期",
+                       "選修別","星期","節次")
+gradeData2$科目名稱=gsub("國文：經典閱讀與詮釋", "國文",
+                     gradeData2$科目名稱)
+
+Acc=gradeData2[grepl("會計學",gradeData2$系級),]
+Acc_all=select(Acc,
+       學年,學期,科目名稱,選修別,授課老師,學分數,學期成績)
+Acc1=Acc_all[grepl("100",Acc_all$學年),][-1]
+rownames(Acc1)=NULL
+Acc2=Acc_all[grepl("101",Acc_all$學年),][-1]
+rownames(Acc2)=NULL
+Acc3=Acc_all[grepl("102",Acc_all$學年),][-1]
+rownames(Acc3)=NULL
+Acc4=Acc_all[grepl("103",Acc_all$學年),][-1]
+rownames(Acc4)=NULL
+Acc11=Acc1[grepl("1",Acc1$學期),][-1]
+Acc12=Acc1[grepl("2",Acc1$學期),][-1]
+Acc21=Acc2[grepl("1",Acc2$學期),][-1]
+Acc22=Acc2[grepl("2",Acc2$學期),][-1]
+Acc31=Acc3[grepl("1",Acc3$學期),][-1]
+Acc32=Acc3[grepl("2",Acc3$學期),][-1]
+Acc41=Acc4[grepl("1",Acc4$學期),][-1]
+Acc42=Acc4[grepl("2",Acc4$學期),][-1]
+rownames(Acc_all)=NULL
+rownames(Acc12)=NULL
+rownames(Acc21)=NULL
+rownames(Acc22)=NULL
+rownames(Acc31)=NULL
+rownames(Acc32)=NULL
+rownames(Acc41)=NULL
+rownames(Acc42)=NULL
+rownames(Acc11)=NULL
+rownames(Acc12)=NULL
+rownames(Acc21)=NULL
+rownames(Acc22)=NULL
+rownames(Acc31)=NULL
+rownames(Acc32)=NULL
+rownames(Acc41)=NULL
+rownames(Acc42)=NULL
+
+
+##全部
+Acc_all_加權=Acc_all[6]*Acc_all[7]
+Acc_all_必=Acc_all[grepl("必",Acc_all$選修別),]
+Acc_all_必_加權=Acc_all_必[6]*Acc_all_必[7]
+Acc_all_選=Acc_all[grepl("選",Acc_all$選修別),]
+Acc_all_選_加權=Acc_all_選[6]*Acc_all_選[7]
+Acc_all_通=Acc_all[grepl("通",Acc_all$選修別),]
+Acc_all_通_加權=Acc_all_通[6]*Acc_all_通[7]
+
+
+##第一學年
+Acc1_加權=Acc1[5]*Acc1[6]
+Acc1_必=Acc1[grepl("必",Acc1$選修別),]
+Acc1_必_加權=Acc1_必[5]*Acc1_必[6]
+Acc1_選=Acc1[grepl("選",Acc1$選修別),]
+Acc1_選_加權=Acc1_選[5]*Acc1_選[6]
+Acc1_通=Acc1[grepl("通",Acc1$選修別),]
+Acc1_通_加權=Acc1_通[5]*Acc1_通[6]
+
+##第二學年
+Acc2_加權=Acc2[5]*Acc2[6]
+Acc2_必=Acc2[grepl("必",Acc2$選修別),]
+Acc2_必_加權=Acc2_必[5]*Acc2_必[6]
+Acc2_選=Acc2[grepl("選",Acc2$選修別),]
+Acc2_選_加權=Acc2_選[5]*Acc2_選[6]
+Acc2_通=Acc2[grepl("通",Acc2$選修別),]
+Acc2_通_加權=Acc2_通[5]*Acc2_通[6]
+
+##第三學年
+Acc3_加權=Acc3[5]*Acc3[6]
+Acc3_必=Acc3[grepl("必",Acc3$選修別),]
+Acc3_必_加權=Acc3_必[5]*Acc3_必[6]
+Acc3_選=Acc3[grepl("選",Acc3$選修別),]
+Acc3_選_加權=Acc3_選[5]*Acc3_選[6]
+Acc3_通=Acc3[grepl("通",Acc3$選修別),]
+Acc3_通_加權=Acc3_通[5]*Acc3_通[6]
+
+##第四學年
+Acc4_加權=Acc4[5]*Acc4[6]
+Acc4_必=Acc4[grepl("必",Acc4$選修別),]
+Acc4_必_加權=Acc4_必[5]*Acc4_必[6]
+Acc4_選=Acc4[grepl("選",Acc4$選修別),]
+Acc4_選_加權=Acc4_選[5]*Acc4_選[6]
+Acc4_通=Acc4[grepl("通",Acc4$選修別),]
+Acc4_通_加權=Acc4_通[5]*Acc4_通[6]
+
+###學期
+Acc11_加權=Acc11[4]*Acc11[5]
+Acc11_必=Acc11[grepl("必",Acc11$選修別),]
+Acc11_必_加權=Acc11_必[4]*Acc11_必[5]
+Acc11_選=Acc11[grepl("選",Acc11$選修別),]
+Acc11_選_加權=Acc11_選[4]*Acc11_選[5]
+Acc11_通=Acc11[grepl("通",Acc11$選修別),]
+Acc11_通_加權=Acc11_通[4]*Acc11_通[5]
+
+Acc12_加權=Acc12[4]*Acc12[5]
+Acc12_必=Acc12[grepl("必",Acc12$選修別),]
+Acc12_必_加權=Acc12_必[4]*Acc12_必[5]
+Acc12_選=Acc12[grepl("選",Acc12$選修別),]
+Acc12_選_加權=Acc12_選[4]*Acc12_選[5]
+Acc12_通=Acc12[grepl("通",Acc12$選修別),]
+Acc12_通_加權=Acc12_通[4]*Acc12_通[5]
+
+Acc21_加權=Acc21[4]*Acc21[5]
+Acc21_必=Acc21[grepl("必",Acc21$選修別),]
+Acc21_必_加權=Acc21_必[4]*Acc21_必[5]
+Acc21_選=Acc21[grepl("選",Acc21$選修別),]
+Acc21_選_加權=Acc21_選[4]*Acc21_選[5]
+Acc21_通=Acc21[grepl("通",Acc21$選修別),]
+Acc21_通_加權=Acc21_通[4]*Acc21_通[5]
+
+Acc22_加權=Acc22[4]*Acc22[5]
+Acc22_必=Acc22[grepl("必",Acc22$選修別),]
+Acc22_必_加權=Acc22_必[4]*Acc22_必[5]
+Acc22_選=Acc22[grepl("選",Acc22$選修別),]
+Acc22_選_加權=Acc22_選[4]*Acc22_選[5]
+Acc22_通=Acc22[grepl("通",Acc22$選修別),]
+Acc22_通_加權=Acc22_通[4]*Acc22_通[5]
+
+Acc31_加權=Acc31[4]*Acc31[5]
+Acc31_必=Acc31[grepl("必",Acc31$選修別),]
+Acc31_必_加權=Acc31_必[4]*Acc31_必[5]
+Acc31_選=Acc31[grepl("選",Acc31$選修別),]
+Acc31_選_加權=Acc31_選[4]*Acc31_選[5]
+Acc31_通=Acc31[grepl("通",Acc31$選修別),]
+Acc31_通_加權=Acc31_通[4]*Acc31_通[5]
+
+Acc32_加權=Acc32[4]*Acc32[5]
+Acc32_必=Acc32[grepl("必",Acc32$選修別),]
+Acc32_必_加權=Acc32_必[4]*Acc32_必[5]
+Acc32_選=Acc32[grepl("選",Acc32$選修別),]
+Acc32_選_加權=Acc32_選[4]*Acc32_選[5]
+Acc32_通=Acc32[grepl("通",Acc32$選修別),]
+Acc32_通_加權=Acc32_通[4]*Acc32_通[5]
+
+Acc41_加權=Acc41[4]*Acc41[5]
+Acc41_必=Acc41[grepl("必",Acc41$選修別),]
+Acc41_必_加權=Acc41_必[4]*Acc41_必[5]
+Acc41_選=Acc41[grepl("選",Acc41$選修別),]
+Acc41_選_加權=Acc41_選[4]*Acc41_選[5]
+Acc41_通=Acc41[grepl("通",Acc41$選修別),]
+Acc41_通_加權=Acc41_通[4]*Acc41_通[5]
+
+Acc42_加權=Acc42[4]*Acc42[5]
+Acc42_必=Acc42[grepl("必",Acc42$選修別),]
+Acc42_必_加權=Acc42_必[4]*Acc42_必[5]
+Acc42_選=Acc42[grepl("選",Acc42$選修別),]
+Acc42_選_加權=Acc42_選[4]*Acc42_選[5]
+Acc42_通=Acc42[grepl("通",Acc42$選修別),]
+Acc42_通_加權=Acc42_通[4]*Acc42_通[5]
+```
+
+```{r}
+load("Acc_f1.Rda")
+load("Acc_f2.Rda")
+load("Acc_f3.Rda")
+load("Acc_f4.Rda")
+
+load("Acc_f11.Rda")
+load("Acc_f12.Rda")
+load("Acc_f21.Rda")
+load("Acc_f22.Rda")
+load("Acc_f31.Rda")
+load("Acc_f32.Rda")
+load("Acc_f41.Rda")
+load("Acc_f42.Rda")
+
+load("fAcc1.Rda")
+load("fAcc2.Rda")
+load("fAcc3.Rda")
+load("fAcc4.Rda")
+
+load("fAcc1_credit.Rda")
+load("fAcc2_credit.Rda")
+load("fAcc3_credit.Rda")
+load("fAcc4_credit.Rda")
+
+load("dAcc1_credit.Rda")
+load("dAcc2_credit.Rda")
+load("dAcc3_credit.Rda")
+load("dAcc4_credit.Rda")
+```
+
+```{r}
+dAcc1=fAcc1*100
+dAcc1$學期=dAcc1$學期/100
+dAcc1=dAcc1[-1]
+dAcc1=rbind(dAcc1,dAcc1[2,]-dAcc1[1,])
+dAcc1=t(dAcc1)
+colnames(dAcc1)=c(1,2,"進步幅度")
+
+dAcc2=fAcc2*100
+dAcc2$學期=dAcc2$學期/100
+dAcc2=dAcc2[-1]
+dAcc2=rbind(dAcc2,dAcc2[2,]-dAcc2[1,])
+dAcc2=t(dAcc2)
+colnames(dAcc2)=c(1,2,"進步幅度")
+
+dAcc3=fAcc3*100
+dAcc3$學期=dAcc3$學期/100
+dAcc3=dAcc3[-1]
+dAcc3=rbind(dAcc3,dAcc3[2,]-dAcc3[1,])
+dAcc3=t(dAcc3)
+colnames(dAcc3)=c(1,2,"進步幅度")
+
+dAcc4=fAcc4*100
+dAcc4$學期=dAcc4$學期/100
+dAcc4=dAcc4[-1]
+dAcc4=rbind(dAcc4,dAcc4[2,]-dAcc4[1,])
+dAcc4=t(dAcc4)
+colnames(dAcc4)=c(1,2,"進步幅度")
+```
+
+
+歷年成績 {data-icon="fa-bar-chart"}
+=====================================
+Column {.tabset }
+-------------------------------------
+### 四年總結
+```{r }
+cat("您總共修了",nrow(Acc_all),"門課，\n 共",
+    sum(Acc_all$學分數),"學分，\n 總平均為",
+    sum(Acc_all_加權)/sum(Acc_all$學分數),"分;\n其中，修了\n ",sum(Acc_all_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc_all_必$學分數),"學分，\n   平均為",
+    sum(Acc_all_必_加權)/sum(Acc_all_必$學分數),"分;\n ",sum(Acc_all_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc_all_選$學分數),"學分，\n   平均為",
+    sum(Acc_all_選_加權)/sum(Acc_all_選$學分數),"分;\n ",sum(Acc_all_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc_all_通$學分數),"學分，\n   平均為",
+    sum(Acc_all_通_加權)/sum(Acc_all_通$學分數),"分。")
+
+
+cat("101學年度上學期的學期成績最高，而100學年度上學期的學期成績最低。")
+
+
+cat("其中，星期四的課最多，而星期二最少(不含星期六)；\n3~4節的課最多，而1~2節最少。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc_all, options = list( bPaginate = FALSE))
+```
+
+Column {.tabset }
+-------------------------------------
+### 各學期平均
+```{r}
+學期 <- c('1','2','3','4','5','6','7','8')
+平均分數 <- c(73.32,74.91,83.19,80.39,78.76,81.12,82.93,82.9)
+dAcc <- data.frame(學期 = 學期, 平均分數 = 平均分數)
+library(ggplot2)
+fAcc_all=ggplot(dAcc,aes(x=學期,y=平均分數,group=1)) +
+			geom_line(size =0.8,color="#EA0000")+ 
+				geom_point(size=1,color="#EA0000")+
+  theme(plot.background = element_rect(colour = "black",
+                                       size = 3,
+                                       fill ="#C4E1FF"),
+        axis.title.y = element_text(angle = 0,vjust=1,
+                                    margin = margin(r = -15)),
+        plot.margin = unit(c(0.2, 0.2, 0.2, 0.2), "inches"))
+library(plotly)
+ggplotly(fAcc_all)
+
+```
+
+### 趣味小統計-星期
+```{r}
+星期 <- c('一','二','三','四','五','六')
+次數 <- c(12,8,14,16,9,2)
+dAcc_wd <- data.frame(星期 = 星期, 次數 = 次數)
+library(ggplot2)
+fAcc_wd=ggplot(dAcc_wd, aes(x=星期, y=次數)) + geom_bar(stat="identity",fill="#0080FF")+theme(plot.background = element_rect(colour = "black",
+    size = 3,
+    fill ="#C4E1FF"))
+library(plotly)
+ggplotly(fAcc_wd)
+```
+
+### 趣味小統計-節次
+```{r}
+節次 <- c("1~2","1~3","2~4","3~4","5~6","5~7","7~8","7~9","8~9")
+次數 <- c(6,1,14,8,9,12,7,3,1)
+dAcc_t <- data.frame(節次 = 節次, 次數 = 次數)
+library(ggplot2)
+fAcc_t=ggplot(dAcc_t, aes(x=節次, y=次數)) +
+  geom_bar(stat="identity",fill="#0080FF")+
+  theme(plot.background = element_rect(colour = "black",
+    size = 3,
+    fill ="#C4E1FF"))
+library(plotly)
+ggplotly(fAcc_t)
+
+```
+
+全學年 {data-navmenu="100學年度"}
+=====================================
+
+Column {.tabset}
+-------------------------------------
+
+### 本年度小結 
+
+```{r}
+cat("您總共修了",nrow(Acc1),"門課，\n 共",
+    sum(Acc1$學分數),"學分，\n 總平均為",
+    sum(Acc1_加權)/sum(Acc1$學分數),"分;\n\n其中，修了\n ",sum(Acc1_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc1_必$學分數),"學分，\n   平均為",
+    sum(Acc1_必_加權)/sum(Acc1_必$學分數),"分;\n ",sum(Acc1_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc1_選$學分數),"學分，\n   平均為",
+    sum(Acc1_選_加權)/sum(Acc1_選$學分數),"分;\n ",sum(Acc1_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc1_通$學分數),"學分，\n   平均為",
+    sum(Acc1_通_加權)/sum(Acc1_通$學分數),"分。")
+```
+
+### 成績單
+
+```{r}
+DT::datatable(Acc1, options = list( bPaginate = FALSE)) 
+```
+
+
+### 進步幅度(成績單)
+```{r}
+DT::datatable(dAcc1, options = list( bPaginate = FALSE)) 
+```
+
+### 畢業進度(成績單)
+```{r}
+DT::datatable(dAcc1_credit, options = list( bPaginate = FALSE)) 
+```
+
+
+Column {.tabset }
+---------------------------
+### 進步幅度(雷達圖)
+```{r}
+Acc_f1
+```
+
+### 畢業進度
+```{r}
+fAcc1_credit
+```
+
+### 說明
+```{r}
+cat("1.在畢業進度(雷達圖)中，若該部分之學分超過所需之畢業學分，將以100%計算。\n2.全學年之進步幅度(雷達圖)僅使用上下學期有重複修習的課程。")
+```
+
+第一學期 {data-navmenu="100學年度"}
+=====================================
+
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Acc11),"門課，\n 共",
+    sum(Acc11$學分數),"學分，\n 總平均為",
+    sum(Acc11_加權)/sum(Acc11$學分數),"分;\n\n其中，修了\n ",sum(Acc11_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc11_必$學分數),"學分，\n   平均為",
+    sum(Acc11_必_加權)/sum(Acc11_必$學分數),"分;\n ",sum(Acc11_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc11_選$學分數),"學分，\n   平均為",
+    sum(Acc11_選_加權)/sum(Acc11_選$學分數),"分;\n ",sum(Acc11_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc11, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Acc_f11
+```
+
+
+
+第二學期 {data-navmenu="100學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Acc12),"門課，\n 共",
+    sum(Acc12$學分數),"學分，\n 總平均為",
+    sum(Acc12_加權)/sum(Acc12$學分數),"分;\n\n其中，修了\n ",sum(Acc12_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc12_必$學分數),"學分，\n   平均為",
+    sum(Acc12_必_加權)/sum(Acc12_必$學分數),"分;\n ",sum(Acc12_選$選修別=="選"),"門選修;\n ",sum(Acc12_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc12_通$學分數),"學分，\n   平均為",
+    sum(Acc12_通_加權)/sum(Acc12_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc12, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Acc_f12
+```
+
+
+
+全學年 {data-navmenu="101學年度"}
+=====================================
+Column {.tabset }
+-------------------------------------
+
+### 本年度小結
+
+```{r}
+cat("您總共修了",nrow(Acc2),"門課，\n 共",
+    sum(Acc2$學分數),"學分，\n 總平均為",
+    sum(Acc2_加權)/sum(Acc2$學分數),"分;\n\n其中，修了\n ",sum(Acc2_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc2_必$學分數),"學分，\n   平均為",
+    sum(Acc2_必_加權)/sum(Acc2_必$學分數),"分;\n ",sum(Acc2_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc2_選$學分數),"學分，\n   平均為",
+    sum(Acc2_選_加權)/sum(Acc2_選$學分數),"分;\n ",sum(Acc2_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc2_通$學分數),"學分，\n   平均為",
+    sum(Acc2_通_加權)/sum(Acc2_通$學分數),"分。")
+```
+
+### 成績單
+
+```{r}
+DT::datatable(Acc2, options = list( bPaginate = FALSE)) 
+```
+
+
+### 進步幅度(成績單)
+```{r}
+DT::datatable(dAcc2, options = list( bPaginate = FALSE)) 
+```
+
+### 畢業進度(成績單)
+```{r}
+DT::datatable(dAcc2_credit, options = list( bPaginate = FALSE)) 
+```
+
+
+Column {.tabset }
+---------------------------
+### 進步幅度(雷達圖)
+```{r}
+Acc_f2
+```
+
+### 畢業進度
+```{r}
+fAcc2_credit
+```
+
+
+第一學期 {data-navmenu="101學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Acc21),"門課，\n 共",
+    sum(Acc21$學分數),"學分，\n 總平均為",
+    sum(Acc21_加權)/sum(Acc21$學分數),"分;\n\n其中，修了\n ",sum(Acc21_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc21_必$學分數),"學分，\n   平均為",
+    sum(Acc21_必_加權)/sum(Acc21_必$學分數),"分;\n ",sum(Acc21_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc21_選$學分數),"學分，\n   平均為",
+    sum(Acc21_選_加權)/sum(Acc21_選$學分數),"分;\n ",sum(Acc21_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc21_通$學分數),"學分，\n   平均為",
+    sum(Acc21_通_加權)/sum(Acc21_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc21, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Acc_f21
+```
+
+
+
+第二學期 {data-navmenu="101學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Acc22),"門課，\n 共",
+    sum(Acc22$學分數),"學分，\n 總平均為",
+    sum(Acc22_加權)/sum(Acc22$學分數),"分;\n\n其中，修了\n ",sum(Acc22_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc22_必$學分數),"學分，\n   平均為",
+    sum(Acc22_必_加權)/sum(Acc22_必$學分數),"分;\n ",sum(Acc22_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc22_選$學分數),"學分，\n   平均為",
+    sum(Acc22_選_加權)/sum(Acc22_選$學分數),"分;\n ",sum(Acc22_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc22_通$學分數),"學分，\n   平均為",
+    sum(Acc22_通_加權)/sum(Acc22_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc22, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Acc_f22
+```
+
+
+全學年 {data-navmenu="102學年度"}
+=====================================
+Column {.tabset }
+-------------------------------------
+
+### 本年度小結
+
+```{r}
+cat("您總共修了",nrow(Acc3),"門課，\n 共",
+    sum(Acc3$學分數),"學分，\n 總平均為",
+    sum(Acc3_加權)/sum(Acc3$學分數),"分;\n\n其中，修了\n ",sum(Acc3_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc3_必$學分數),"學分，\n   平均為",
+    sum(Acc3_必_加權)/sum(Acc3_必$學分數),"分;\n ",sum(Acc3_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc3_選$學分數),"學分，\n   平均為",
+    sum(Acc3_選_加權)/sum(Acc3_選$學分數),"分;\n ",sum(Acc3_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+
+```{r}
+DT::datatable(Acc3, options = list( bPaginate = FALSE)) 
+```
+
+
+### 進步幅度(成績單)
+```{r}
+DT::datatable(dAcc3, options = list( bPaginate = FALSE)) 
+```
+
+### 畢業進度(成績單)
+```{r}
+DT::datatable(dAcc3_credit, options = list( bPaginate = FALSE)) 
+```
+
+
+Column {.tabset }
+---------------------------
+### 進步幅度(雷達圖)
+```{r}
+Acc_f3
+```
+
+### 畢業進度
+```{r}
+fAcc3_credit
+```
+
+
+第一學期 {data-navmenu="102學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Acc31),"門課，\n 共",
+    sum(Acc31$學分數),"學分，\n 總平均為",
+    sum(Acc31_加權)/sum(Acc31$學分數),"分;\n\n其中，修了\n ",sum(Acc31_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc31_必$學分數),"學分，\n   平均為",
+    sum(Acc31_必_加權)/sum(Acc31_必$學分數),"分;\n ",sum(Acc31_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc31_選$學分數),"學分，\n   平均為",
+    sum(Acc31_選_加權)/sum(Acc31_選$學分數),"分;\n ",sum(Acc31_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc31, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Acc_f31
+```
+
+
+第二學期 {data-navmenu="102學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Acc32),"門課，\n 共",
+    sum(Acc32$學分數),"學分，\n 總平均為",
+    sum(Acc32_加權)/sum(Acc32$學分數),"分;\n\n其中，修了\n ",sum(Acc32_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc32_必$學分數),"學分，\n   平均為",
+    sum(Acc32_必_加權)/sum(Acc32_必$學分數),"分;\n ",sum(Acc32_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc32_選$學分數),"學分，\n   平均為",
+    sum(Acc32_選_加權)/sum(Acc32_選$學分數),"分;\n ",sum(Acc32_通$選修別=="通"),"門通識。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc32, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Acc_f32
+```
+
+
+全學年 {data-navmenu="103學年度" data-icon="fas fa-graduation-cap"}
+=====================================
+Column {.tabset data-icon="fas fa-graduation-cap" }
+-------------------------------------
+
+### 本年度小結
+
+```{r}
+cat("您總共修了",nrow(Acc4),"門課，\n 共",
+    sum(Acc4$學分數),"學分，\n 總平均為",
+    sum(Acc4_加權)/sum(Acc4$學分數),"分;\n\n其中，修了\n ",sum(Acc4_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc4_必$學分數),"學分，\n   平均為",
+    sum(Acc4_必_加權)/sum(Acc4_必$學分數),"分;\n ",sum(Acc4_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc4_選$學分數),"學分，\n   平均為",
+    sum(Acc4_選_加權)/sum(Acc4_選$學分數),"分;\n ",sum(Acc4_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc4_通$學分數),"學分，\n   平均為",
+    sum(Acc4_通_加權)/sum(Acc4_通$學分數),"分")
+```
+
+### 成績單
+
+```{r}
+DT::datatable(Acc4, options = list( bPaginate = FALSE)) 
+```
+
+
+### 進步幅度(成績單)
+```{r}
+DT::datatable(dAcc4, options = list( bPaginate = FALSE)) 
+```
+
+### 畢業進度(成績單)
+```{r}
+DT::datatable(dAcc4_credit, options = list( bPaginate = FALSE)) 
+```
+
+
+Column {.tabset }
+---------------------------
+### 進步幅度(雷達圖)
+```{r}
+Acc_f4
+```
+
+### 畢業進度
+```{r}
+fAcc4_credit
+```
+
+
+第一學期 {data-navmenu="103學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Acc41),"門課，\n 共",
+    sum(Acc41$學分數),"學分，\n 總平均為",
+    sum(Acc41_加權)/sum(Acc41$學分數),"分;\n\n其中，修了\n ",sum(Acc41_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc41_必$學分數),"學分，\n   平均為",
+    sum(Acc41_必_加權)/sum(Acc41_必$學分數),"分;\n ",sum(Acc41_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc41_選$學分數),"學分，\n   平均為",
+    sum(Acc41_選_加權)/sum(Acc41_選$學分數),"分;\n ",sum(Acc41_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc41_通$學分數),"學分，\n   平均為",
+    sum(Acc41_通_加權)/sum(Acc41_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc41, options = list( bPaginate = FALSE)) 
+```
+
+Column 
+---------------------------
+### 雷達圖
+```{r}
+Acc_f41
+```
+
+
+第二學期 {data-navmenu="103學年度"}
+=====================================
+Column {.tabset }
+---------------------------
+### 學期小結
+```{r }
+cat("您總共修了",nrow(Acc42),"門課，\n 共",
+    sum(Acc42$學分數),"學分，\n 總平均為",
+    sum(Acc42_加權)/sum(Acc42$學分數),"分;\n\n其中，修了\n ",sum(Acc42_必$選修別=="必"),"門必修，\n   共",
+    sum(Acc42_必$學分數),"學分，\n   平均為",
+    sum(Acc42_必_加權)/sum(Acc42_必$學分數),"分;\n ",sum(Acc42_選$選修別=="選"),"門選修，\n   共",
+    sum(Acc42_選$學分數),"學分，\n   平均為",
+    sum(Acc42_選_加權)/sum(Acc42_選$學分數),"分;\n ",sum(Acc42_通$選修別=="通"),"門通識，\n   共",
+    sum(Acc42_通$學分數),"學分，\n   平均為",
+    sum(Acc42_通_加權)/sum(Acc42_通$學分數),"分。")
+```
+
+### 成績單
+```{r}
+DT::datatable(Acc42, options = list( bPaginate = FALSE)) 
+```
+
+Column {.tabset}
+---------------------------
+### 雷達圖
+```{r}
+Acc_f42
+```
